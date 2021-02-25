@@ -1,37 +1,30 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "durability-alert-mod",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Durability Alert",
+  "description": "The Durability Alert mod alerts the user when the tool they are using is likely to break soon",
   "authors": [
-    "Me!"
+    "Mike Dillon <mike@appropriate.io>"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/appropriate/durability-alert-mod"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "MIT",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
+    "client": [
+      "io.appropriate.minecraft.mods.durability.DurabilityAlertMod"
     ]
   },
-  "mixins": [
-    "modid.mixins.json"
-  ],
 
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
+    "fabric-key-binding-api-v1": "*",
     "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }
