@@ -1,9 +1,7 @@
-# Fabric Example Mod
+# Durability Alert Mod
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+The Durablity Alert Mod is a client-side mod that provides a the user with a textual alert when a tool is in danger of breaking based on its current damage level and ongoing use.
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This template is available under the MIT license.
