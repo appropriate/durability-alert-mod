@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 
@@ -20,8 +20,9 @@ public class DurabilityAlertMod implements ClientModInitializer {
         int remainingDamagePercent = calculateRemainingDamagePercent(stack);
 
         player.sendMessage(
-          new LiteralText(
-            stack.getItem() + " at " + remainingDamagePercent + "% durability, block breaking speed " + breakingSpeed
+          new TranslatableText(
+            "durability-alert-mod.messages.alert",
+            stack.getItem().getName(), remainingDamagePercent, breakingSpeed
           ).formatted(damageColor(remainingDamagePercent)),
           true
         );
