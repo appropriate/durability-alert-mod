@@ -16,10 +16,10 @@ public class DurabilityAlertMod implements ClientModInitializer {
             ItemStack stack = player.getMainHandStack();
             BlockState block = world.getBlockState(pos);
 
-            if (player.isUsingEffectiveTool(block) && stack.isDamaged()) {
+            if (player.isUsingEffectiveTool(block)) {
                 DurabilityChecker.Result result = checker.checkItemStack(stack);
 
-                if (result.shouldAlert()) {
+                if (result != null) {
                     player.sendMessage(
                         new TranslatableText(
                             "durability-alert-mod.messages.alert",
