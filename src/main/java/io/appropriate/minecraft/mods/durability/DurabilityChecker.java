@@ -1,10 +1,14 @@
 package io.appropriate.minecraft.mods.durability;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Formatting;
 
@@ -13,9 +17,29 @@ public class DurabilityChecker {
       1, 2, 3, 4, 5, 10, 15, 20, 25, 50
     };
 
+    private static final Set<ToolMaterials> IMPORTANT_MATERIALS = EnumSet.of(
+      ToolMaterials.GOLD,
+      ToolMaterials.DIAMOND,
+      ToolMaterials.NETHERITE
+    );
+
     private Result previous = null;
 
+    public static boolean isAlertable(ItemStack stack) {
+        if (!ToolItem.class.isInstance(stack.getItem())) {
+            return false;
+        }
+
+        return IMPORTANT_MATERIALS.contains(
+            ToolItem.class.cast(stack.getItem()).getMaterial()
+        );
+    }
+
     public Result checkItemStack(ItemStack stack) {
+        if (!DurabilityChecker.isAlertable(stack)) {
+            return null;
+        }
+
         Result result = new Result(stack);
 
         if (result.alertCutoff == null || result.repeats(previous)) {
