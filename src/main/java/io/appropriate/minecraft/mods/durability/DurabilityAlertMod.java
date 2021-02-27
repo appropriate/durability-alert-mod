@@ -24,8 +24,7 @@ public class DurabilityAlertMod implements ClientModInitializer {
                         new TranslatableText(
                             "durability-alert-mod.messages.alert",
                             stack.getItem().getName(),
-                            result.getRemainingDamagePercent(),
-                            player.getBlockBreakingSpeed(block)
+                            result.getRemainingDamagePercent()
                         ).formatted(result.getDamageColor()),
                         true
                     );
