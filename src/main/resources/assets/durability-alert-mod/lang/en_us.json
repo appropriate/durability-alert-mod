@@ -1,4 +1,12 @@
 {
     "messages.durability-alert-mod.alert": "Your %s is now at %d%% durability",
-    "messages.durability-alert-mod.alert-named": "%s is now at %d%% durability"
+    "messages.durability-alert-mod.alert-named": "%s is now at %d%% durability",
+    "category.durability-alert-mod.alerts": "Alerts",
+    "category.durability-alert-mod.alerts.flags": "flags",
+    "option.durability-alert-mod.alert-cutoffs": "Alert Cutoffs",
+    "tooltip.durability-alert-mod.alert-cutoffs": "Alerts will be generated at these durability percentages",
+    "option.durability-alert-mod.alert-all-named": "Named Item Alert",
+    "tooltip.durability-alert-mod.alert-all-named": "Always alert for named items, regardless of material",
+    "option.durability-alert-mod.alert-all-enchanted": "Enchanted Item Alert",
+    "tooltip.durability-alert-mod.alert-all-enchanted": "Always alert for enchanted items, regardless of material"
 }

@@ -18,6 +18,9 @@
   "entrypoints": {
       "client": [
           "io.appropriate.minecraft.mods.durability.DurabilityAlertMod"
+      ],
+      "modmenu": [
+          "io.appropriate.minecraft.mods.durability.DurabilityAlertModMenuIntegration"
       ]
   },
 
