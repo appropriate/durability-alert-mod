@@ -16,9 +16,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import net.minecraft.Bootstrap;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
 
 class DurabilityCheckerTests {
     @BeforeAll
@@ -146,5 +148,27 @@ class DurabilityCheckerTests {
         ItemStack other = new ItemStack(Items.DIAMOND_AXE);
         other.setDamage(other.getMaxDamage() / 2 - 1);
         assertThat(checker.checkItemStack(other)).isNotNull();
+    }
+
+    @DisplayName("Checking a named item with an unimportant material alerts")
+    @Test
+    void returnsResultCheckingNamedItemWithUnimportantMaterial() {
+        DurabilityChecker checker = new DurabilityChecker();
+
+        ItemStack stack = new ItemStack(Items.WOODEN_SHOVEL);
+        stack.setDamage(stack.getMaxDamage() - 1);
+        stack.setCustomName(new LiteralText("Me dear old spade"));
+        assertThat(checker.checkItemStack(stack)).isNotNull();
+    }
+
+    @DisplayName("Checking an enchanted item with an unimportant material alerts")
+    @Test
+    void returnsResultCheckingEnchantedItemWithUnimportantMaterial() {
+        DurabilityChecker checker = new DurabilityChecker();
+
+        ItemStack stack = new ItemStack(Items.WOODEN_SHOVEL);
+        stack.setDamage(stack.getMaxDamage() - 1);
+        stack.addEnchantment(Enchantments.MENDING, 1);
+        assertThat(checker.checkItemStack(stack)).isNotNull();
     }
 }

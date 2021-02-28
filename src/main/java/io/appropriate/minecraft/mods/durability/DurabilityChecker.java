@@ -30,6 +30,14 @@ public class DurabilityChecker {
             return false;
         }
 
+        if (stack.hasCustomName()) {
+            return true;
+        }
+
+        if (stack.hasEnchantments()) {
+            return true;
+        }
+
         return IMPORTANT_MATERIALS.contains(
             ToolItem.class.cast(stack.getItem()).getMaterial()
         );
