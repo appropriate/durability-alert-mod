@@ -39,29 +39,33 @@ class DurabilityCheckerTests {
     }
 
     private static Stream<Item> returnsNullForFreshTools() {
-      return Stream.of(
-          Items.DIAMOND_AXE,
-          Items.DIAMOND_PICKAXE,
-          Items.DIAMOND_SHOVEL,
-          Items.DIAMOND_SWORD,
-          Items.GOLDEN_AXE,
-          Items.GOLDEN_PICKAXE,
-          Items.GOLDEN_SHOVEL,
-          Items.GOLDEN_SWORD,
-          Items.IRON_AXE,
-          Items.IRON_PICKAXE,
-          Items.IRON_SHOVEL,
-          Items.IRON_SWORD,
-          Items.NETHERITE_AXE,
-          Items.NETHERITE_PICKAXE,
-          Items.NETHERITE_SHOVEL,
-          Items.NETHERITE_SWORD,
-          Items.SHEARS,
-          Items.WOODEN_AXE,
-          Items.WOODEN_PICKAXE,
-          Items.WOODEN_SHOVEL,
-          Items.WOODEN_SWORD
-      );
+        return Stream.of(
+            Items.DIAMOND_AXE,
+            Items.DIAMOND_PICKAXE,
+            Items.DIAMOND_SHOVEL,
+            Items.DIAMOND_SWORD,
+            Items.GOLDEN_AXE,
+            Items.GOLDEN_PICKAXE,
+            Items.GOLDEN_SHOVEL,
+            Items.GOLDEN_SWORD,
+            Items.IRON_AXE,
+            Items.IRON_PICKAXE,
+            Items.IRON_SHOVEL,
+            Items.IRON_SWORD,
+            Items.NETHERITE_AXE,
+            Items.NETHERITE_PICKAXE,
+            Items.NETHERITE_SHOVEL,
+            Items.NETHERITE_SWORD,
+            Items.SHEARS,
+            Items.STONE_AXE,
+            Items.STONE_PICKAXE,
+            Items.STONE_SHOVEL,
+            Items.STONE_SWORD,
+            Items.WOODEN_AXE,
+            Items.WOODEN_PICKAXE,
+            Items.WOODEN_SHOVEL,
+            Items.WOODEN_SWORD
+        );
     }
 
     @DisplayName("Checking a damaged wooden or iron tool returns null")
@@ -82,6 +86,10 @@ class DurabilityCheckerTests {
             Items.IRON_SHOVEL,
             Items.IRON_SWORD,
             Items.SHEARS,
+            Items.STONE_AXE,
+            Items.STONE_PICKAXE,
+            Items.STONE_SHOVEL,
+            Items.STONE_SWORD,
             Items.WOODEN_AXE,
             Items.WOODEN_PICKAXE,
             Items.WOODEN_SHOVEL,
