@@ -6,25 +6,24 @@
   "name": "Durability Alert",
   "description": "The Durability Alert mod alerts the user when the tool they are using is likely to break soon",
   "authors": [
-    "Mike Dillon <mike@appropriate.io>"
+      "mrdillon"
   ],
   "contact": {
-    "sources": "https://github.com/appropriate/durability-alert-mod"
+      "sources": "https://github.com/appropriate/durability-alert-mod"
   },
 
   "license": "MIT",
 
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "io.appropriate.minecraft.mods.durability.DurabilityAlertMod"
-    ]
+      "client": [
+          "io.appropriate.minecraft.mods.durability.DurabilityAlertMod"
+      ]
   },
 
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "fabric-key-binding-api-v1": "*",
-    "minecraft": "1.16.x"
+      "fabricloader": ">=0.7.4",
+      "fabric": "*",
+      "minecraft": "1.16.x"
   }
 }
