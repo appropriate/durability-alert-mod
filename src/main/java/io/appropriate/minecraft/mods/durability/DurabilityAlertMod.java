@@ -20,14 +20,14 @@ public class DurabilityAlertMod implements ClientModInitializer {
                 DurabilityChecker.Result result = checker.checkItemStack(stack);
 
                 if (result != null) {
-                    player.sendMessage(
-                        new TranslatableText(
-                            "durability-alert-mod.messages.alert",
-                            stack.getItem().getName(),
-                            result.getRemainingDamagePercent()
-                        ).formatted(result.getDamageColor()),
-                        true
-                    );
+                    String translationKey = stack.hasCustomName()
+                        ? "messages.durability-alert-mod.alert-named"
+                        : "messages.durability-alert-mod.alert";
+
+                    TranslatableText message = new TranslatableText(
+                        translationKey, stack.getName(), result.getRemainingDamagePercent());
+
+                    player.sendMessage(message.formatted(result.getDamageColor()), true);
                 }
             }
 

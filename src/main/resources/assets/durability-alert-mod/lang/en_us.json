@@ -1,3 +1,4 @@
 {
-  "durability-alert-mod.messages.alert": "Your %s is now at %d%% durability"
+    "messages.durability-alert-mod.alert": "Your %s is now at %d%% durability",
+    "messages.durability-alert-mod.alert-named": "%s is now at %d%% durability"
 }
