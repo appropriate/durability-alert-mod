@@ -1,12 +1,15 @@
 {
     "messages.durability-alert-mod.alert": "Your %s is now at %d%% durability",
     "messages.durability-alert-mod.alert-named": "%s is now at %d%% durability",
-    "category.durability-alert-mod.alerts": "Alerts",
-    "category.durability-alert-mod.alerts.flags": "flags",
-    "option.durability-alert-mod.alert-cutoffs": "Alert Cutoffs",
-    "tooltip.durability-alert-mod.alert-cutoffs": "Alerts will be generated at these durability percentages",
-    "option.durability-alert-mod.alert-all-named": "Named Item Alert",
-    "tooltip.durability-alert-mod.alert-all-named": "Always alert for named items, regardless of material",
-    "option.durability-alert-mod.alert-all-enchanted": "Enchanted Item Alert",
-    "tooltip.durability-alert-mod.alert-all-enchanted": "Always alert for enchanted items, regardless of material"
+    "text.autoconfig.durability-alert-mod.title": "Durability Alert Mod",
+    "text.autoconfig.durability-alert-mod.option.alertCutoffs": "Alert Cutoffs",
+    "text.autoconfig.durability-alert-mod.option.alertCutoffs.@Tooltip": "Alerts will be generated at these durability percentages",
+    "text.autoconfig.durability-alert-mod.option.minimumAlertTier": "Minimum Material Tier",
+    "text.autoconfig.durability-alert-mod.option.minimumAlertTier.@Tooltip": "Only alert for items with this material or better",
+    "text.autoconfig.durability-alert-mod.option.alertAllNamed": "Named Item Alert",
+    "text.autoconfig.durability-alert-mod.option.alertAllNamed.@Tooltip": "Always alert for named items, regardless of material",
+    "text.autoconfig.durability-alert-mod.option.alertAllEnchanted": "Enchanted Item Alert",
+    "text.autoconfig.durability-alert-mod.option.alertAllEnchanted.@Tooltip": "Always alert for enchanted items, regardless of material",
+    "text.autoconfig.durability-alert-mod.option.disabled": "Disable Alerts",
+    "text.autoconfig.durability-alert-mod.option.disabled.@Tooltip": "Alerts will not be shown"
 }

@@ -1,32 +1,31 @@
 package io.appropriate.minecraft.mods.durability;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.item.ToolMaterials;
 
-public class DurabilityAlertConfig {
-    public static final List<Integer> DEFAULT_ALERT_CUTOFFS =
-        Collections.unmodifiableList(Arrays.<Integer>asList(
-            1, 2, 3, 4, 5, 10, 15, 20, 25, 50
-        ));
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-    public static final Set<ToolMaterials> DEFAULT_ALERT_MATERIALS =
-        Collections.unmodifiableSet(EnumSet.of(
-            ToolMaterials.DIAMOND,
-            ToolMaterials.GOLD,
-            ToolMaterials.NETHERITE
-        ));
+@Config(name = "durability-alert-mod")
+class DurabilityAlertConfig implements ConfigData {
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+    static List<Integer> alertCutoffs = Arrays.<Integer>asList(
+        1, 2, 3, 4, 5, 10, 15, 20, 25, 50
+    );
 
-    public static final boolean DEFAULT_ALERT_ALL_NAMED = true;
+    @ConfigEntry.Gui.Tooltip
+    static ToolMaterials minimumAlertTier = ToolMaterials.DIAMOND;
 
-    public static final boolean DEFAULT_ALERT_ALL_ENCHANTED = true;
+    @ConfigEntry.Gui.Tooltip
+    static boolean alertAllNamed = true;
 
-    private List<Integer> alertCutoffs = Collections.<Integer>emptyList();
-    private Set<ToolMaterials> alertMaterials = Collections.<ToolMaterials>emptySet();
-    private boolean alertAllNamed = true;
-    private boolean alertAllEnchanted = true;
+    @ConfigEntry.Gui.Tooltip
+    static boolean alertAllEnchanted = true;
+
+    @ConfigEntry.Gui.Tooltip
+    static boolean disabled = false;
 }
