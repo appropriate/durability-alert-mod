@@ -1,7 +1,7 @@
 {
     "messages.durability-alert-mod.alert": "Your %s is now at %d%% durability",
     "messages.durability-alert-mod.alert-named": "%s is now at %d%% durability",
-    "text.autoconfig.durability-alert-mod.title": "Durability Alert Mod",
+    "text.autoconfig.durability-alert-mod.title": "Durability Alert Options",
     "text.autoconfig.durability-alert-mod.option.alertCutoffs": "Alert Cutoffs",
     "text.autoconfig.durability-alert-mod.option.alertCutoffs.@Tooltip": "Alerts will be generated at these durability percentages",
     "text.autoconfig.durability-alert-mod.option.minimumAlertTier": "Minimum Material Tier",

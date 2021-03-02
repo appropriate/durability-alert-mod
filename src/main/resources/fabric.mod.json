@@ -4,11 +4,22 @@
   "version": "${version}",
 
   "name": "Durability Alert",
-  "description": "The Durability Alert mod alerts the user when the tool they are using is likely to break soon",
+  "icon": "assets/durability-alert-mod/logo.png",
+  "description": "The Durability Alert mod alerts the player as the durability of their tool decreases",
+
   "authors": [
-      "mrdillon"
+      {
+          "name": "mrdillon",
+          "contact": {
+              "email": "mike@appropriate.io",
+              "discord": "mrdillon#3037",
+              "twitter": "https://twitter.com/mrdillon"
+          }
+      }
   ],
+
   "contact": {
+      "issues": "https://github.com/appropriate/durability-alert-mod/issues",
       "sources": "https://github.com/appropriate/durability-alert-mod"
   },
 
@@ -28,5 +39,8 @@
       "fabricloader": ">=0.7.4",
       "fabric": "*",
       "minecraft": "1.16.x"
+  },
+
+  "recommends": {
   }
 }
