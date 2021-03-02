@@ -1,7 +1,5 @@
 package io.appropriate.minecraft.mods.durability;
 
-import static io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
-
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
@@ -21,6 +19,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
+
+import io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
 
 class DurabilityCheckerTests {
     @BeforeAll

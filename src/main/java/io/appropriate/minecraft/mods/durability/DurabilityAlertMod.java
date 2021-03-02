@@ -1,15 +1,27 @@
 package io.appropriate.minecraft.mods.durability;
 
+import net.minecraft.util.ActionResult;
+
 import net.fabricmc.api.ClientModInitializer;
 
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 public class DurabilityAlertMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
-        AutoConfig.getConfigHolder(DurabilityAlertConfig.class).getConfig();
-        DurabilityAlertAttackBlockCallback.register();
+
+        ConfigHolder<DurabilityAlertConfig> configHolder =
+            AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
+
+        final DurabilityAlertAttackBlockCallback callback =
+            DurabilityAlertAttackBlockCallback.register(configHolder.getConfig());
+
+        configHolder.registerSaveListener((manager, newData) -> {
+            callback.updateConfig(newData);
+            return ActionResult.SUCCESS;
+        });
     }
 }

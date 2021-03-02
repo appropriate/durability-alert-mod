@@ -16,10 +16,20 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 
 public class DurabilityAlertAttackBlockCallback implements AttackBlockCallback {
-    private DurabilityChecker checker = new DurabilityChecker();
+    private DurabilityChecker checker;
 
-    public static void register() {
-        AttackBlockCallback.EVENT.register(new DurabilityAlertAttackBlockCallback());
+    public static DurabilityAlertAttackBlockCallback register(DurabilityAlertConfig config) {
+        DurabilityAlertAttackBlockCallback callback = new DurabilityAlertAttackBlockCallback(config);
+        AttackBlockCallback.EVENT.register(callback);
+        return callback;
+    }
+
+    public DurabilityAlertAttackBlockCallback(DurabilityAlertConfig config) {
+        this.checker = new DurabilityChecker(config);
+    }
+
+    public void updateConfig(DurabilityAlertConfig config) {
+        this.checker = new DurabilityChecker(config);
     }
 
     public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {

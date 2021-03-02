@@ -8,43 +8,25 @@ import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Formatting;
 
 public class DurabilityChecker {
-    private static final int[] ALERT_CUTOFFS = new int[] {
-      1, 2, 3, 4, 5, 10, 15, 20, 25, 50
-    };
-
-    private static final Set<ToolMaterials> IMPORTANT_MATERIALS = EnumSet.of(
-      ToolMaterials.GOLD,
-      ToolMaterials.DIAMOND,
-      ToolMaterials.NETHERITE
-    );
-
+    private DurabilityAlertConfig config;
     private Result previous = null;
 
-    public static boolean isAlertable(ItemStack stack) {
-        if (!ToolItem.class.isInstance(stack.getItem())) {
-            return false;
-        }
+    public DurabilityChecker() {
+        this(new DurabilityAlertConfig());
+    }
 
-        if (stack.hasCustomName()) {
-            return true;
-        }
-
-        if (stack.hasEnchantments()) {
-            return true;
-        }
-
-        return IMPORTANT_MATERIALS.contains(
-            ToolItem.class.cast(stack.getItem()).getMaterial()
-        );
+    public DurabilityChecker(DurabilityAlertConfig config) {
+        this.config = config;
     }
 
     public Result checkItemStack(ItemStack stack) {
-        if (!DurabilityChecker.isAlertable(stack)) {
+        if (!isAlertable(stack)) {
             return null;
         }
 
@@ -59,7 +41,36 @@ public class DurabilityChecker {
         return result;
     }
 
-    public static class Result {
+    private Stream<Integer> alertCutoffs() {
+        return config.alertCutoffs.stream();
+    }
+
+    private boolean isAlertable(ItemStack stack) {
+        if (config.disabled) {
+            return false;
+        }
+
+        if (!ToolItem.class.isInstance(stack.getItem())) {
+            return false;
+        }
+
+        if (config.alertAllNamed && stack.hasCustomName()) {
+            return true;
+        }
+
+        if (config.alertAllEnchanted && stack.hasEnchantments()) {
+            return true;
+        }
+
+        ToolMaterial material = ToolItem.class.cast(stack.getItem()).getMaterial();
+        if (!ToolMaterials.class.isInstance(material)) {
+            return false;
+        }
+
+        return ((ToolMaterials)material).ordinal() >= config.minimumAlertTier.getMaterial().ordinal();
+    }
+
+    public class Result {
         private ItemStack stack;
         private int remainingDamagePercent;
         private Integer alertCutoff;
@@ -76,12 +87,8 @@ public class DurabilityChecker {
             );
         }
 
-        private Stream<Integer> alertCutoffs() {
-          return Arrays.stream(ALERT_CUTOFFS).boxed();
-        }
-
         private Integer findAlertCutoff() {
-            return alertCutoffs()
+            return DurabilityChecker.this.alertCutoffs()
                 .filter(cutoff -> cutoff >= remainingDamagePercent)
                 .findFirst()
                 .orElse(null);
