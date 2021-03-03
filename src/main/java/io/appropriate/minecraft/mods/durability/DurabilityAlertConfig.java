@@ -1,17 +1,23 @@
 package io.appropriate.minecraft.mods.durability;
 
+import static me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-import static me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON;
+import me.shedaniel.clothconfig2.gui.entries.SelectionListEntry;
 
 @Config(name = "durability-alert-mod")
 class DurabilityAlertConfig implements ConfigData {
@@ -27,7 +33,6 @@ class DurabilityAlertConfig implements ConfigData {
     List<Integer> alertCutoffs = DEFAULT_ALERT_CUTOFFS;
 
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Gui.EnumHandler(option = BUTTON)
     Material minimumAlertTier = DEFAULT_MINIMUM_ALERT_TIER;
 
     @ConfigEntry.Gui.Tooltip
@@ -62,7 +67,7 @@ class DurabilityAlertConfig implements ConfigData {
         return cutoff != null && cutoff >= 0 && cutoff <= 100;
     }
 
-    static enum Material {
+    static enum Material implements SelectionListEntry.Translatable {
         Wood(ToolMaterials.WOOD),
         Stone(ToolMaterials.STONE),
         Iron(ToolMaterials.IRON),
@@ -70,7 +75,7 @@ class DurabilityAlertConfig implements ConfigData {
         Gold(ToolMaterials.GOLD),
         Netherite(ToolMaterials.NETHERITE);
 
-        private ToolMaterials material;
+        private final ToolMaterials material;
 
         Material(ToolMaterials material) {
             this.material = material;
@@ -78,6 +83,17 @@ class DurabilityAlertConfig implements ConfigData {
 
         public ToolMaterials getMaterial() {
             return material;
+        }
+
+        public Item getRepairItem() {
+            return Arrays.stream(material.getRepairIngredient().getMatchingStacksClient())
+                .findFirst()
+                .map(ItemStack::getItem)
+                .orElse(null);
+        }
+
+        public String getKey() {
+            return "text.autoconfig.durability-alert-mod.option.minimumAlertTier.@Material." + name();
         }
     }
 
