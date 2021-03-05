@@ -10,6 +10,7 @@ import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.Collections;
 import java.util.List;
@@ -139,6 +140,22 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
 
             @Override
             protected void renderBg(MatrixStack matrices, MinecraftClient client, int mouseX, int mouseY) {
+                /*
+                 * If the width is greater than 200, then fill in the gap in the middle with more button bg
+                 */
+                int gap = width - 200;
+                if (gap > 0) {
+                    client.getTextureManager().bindTexture(new Identifier("textures/gui/widgets.png"));
+
+                    int offset = 100;
+                    do {
+                        drawTexture(matrices, x + offset, y, 1, 46 + 0 * 20, Math.min(gap, 198), height);
+
+                        offset += 198;
+                        gap -= 198;
+                    } while (gap > 0);
+                }
+
                 // Note: the non-error highlight color here is a bit darker
                 // than the normal highlight of 0xffe0e0e0 to let the scrubber stand out
                 if (isSelected && listListEntry.isEditable())
