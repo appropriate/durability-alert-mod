@@ -2,6 +2,10 @@ package io.appropriate.minecraft.mods.durability;
 
 import static me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +25,10 @@ import me.shedaniel.clothconfig2.gui.entries.SelectionListEntry;
 
 @Config(name = "durability-alert-mod")
 class DurabilityAlertConfig implements ConfigData {
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface IntSliderList {}
+
     @ConfigEntry.Gui.Excluded
     private static final List<Integer> DEFAULT_ALERT_CUTOFFS = Collections.unmodifiableList(Arrays.<Integer>asList(
         1, 2, 3, 4, 5, 10, 15, 20, 25, 50
@@ -30,6 +38,7 @@ class DurabilityAlertConfig implements ConfigData {
     private static final Material DEFAULT_MINIMUM_ALERT_TIER = Material.Diamond;
 
     @ConfigEntry.Gui.Tooltip
+    @IntSliderList
     List<Integer> alertCutoffs = DEFAULT_ALERT_CUTOFFS;
 
     @ConfigEntry.Gui.Tooltip
@@ -96,5 +105,4 @@ class DurabilityAlertConfig implements ConfigData {
             return "text.autoconfig.durability-alert-mod.option.minimumAlertTier.@Material." + name();
         }
     }
-
 }

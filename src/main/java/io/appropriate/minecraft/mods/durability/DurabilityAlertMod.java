@@ -5,6 +5,7 @@ import static me.shedaniel.autoconfig.util.Utils.setUnsafely;
 
 import java.util.Collections;
 
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 
@@ -19,6 +20,8 @@ import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+
+import io.appropriate.minecraft.clothconfig2.IntegerSliderListEntry;
 
 @Environment(EnvType.CLIENT)
 public class DurabilityAlertMod implements ClientModInitializer {
@@ -44,6 +47,25 @@ public class DurabilityAlertMod implements ClientModInitializer {
                 );
             },
             field -> field.getType() == DurabilityAlertConfig.Material.class && !field.isAnnotationPresent(ConfigEntry.Gui.Excluded.class)
+        );
+
+        registry.registerAnnotationProvider(
+            (i13n, field, config, defaults, guiProvider) -> {
+                IntegerSliderListEntry entry = new IntegerSliderListEntry(
+                    new TranslatableText(i13n), 0, 100,
+                    getUnsafely(field, config, getUnsafely(field, defaults)),
+                    false, null,
+                    newValue -> setUnsafely(field, config, newValue),
+                    () -> getUnsafely(field, defaults),
+                    0, new TranslatableText("text.cloth-config.reset_value"),
+                    false, true, false
+                );
+
+                entry.setTextGetter(number -> new LiteralText(number + "%"));
+
+                return Collections.singletonList(entry);
+            },
+            DurabilityAlertConfig.IntSliderList.class
         );
 
         ConfigHolder<DurabilityAlertConfig> configHolder =
