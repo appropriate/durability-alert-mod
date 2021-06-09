@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import net.minecraft.Bootstrap;
+import net.minecraft.SharedConstants;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ import io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
 class DurabilityCheckerTests {
     @BeforeAll
     static void initMinecraft() {
+        SharedConstants.createGameVersion();
         Bootstrap.initialize();
     }
 

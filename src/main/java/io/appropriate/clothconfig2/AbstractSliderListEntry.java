@@ -6,6 +6,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
@@ -45,6 +47,7 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
     public abstract static class AbstractSliderListCell<T, SELF extends AbstractSliderListEntry.AbstractSliderListCell<T, SELF, OUTER_SELF>, OUTER_SELF extends AbstractSliderListEntry<T, SELF, OUTER_SELF>> extends AbstractListListEntry.AbstractListCell<T, SELF, OUTER_SELF> {
         protected final Slider sliderWidget;
         private boolean isSelected;
+        private boolean isHovered;
 
         public AbstractSliderListCell(T value, OUTER_SELF listListEntry) {
             super(value, listListEntry);
@@ -89,11 +92,22 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
         }
 
         @Override
+        public Selectable.SelectionType getType() {
+            return isSelected ? SelectionType.FOCUSED : isHovered ? SelectionType.HOVERED : SelectionType.NONE;
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder) {
+            sliderWidget.appendNarrations(builder);
+        }
+
+        @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isFocusedCell, float delta) {
             sliderWidget.x = x;
             sliderWidget.y = y;
             sliderWidget.setWidth(entryWidth - 12);
             sliderWidget.active = listListEntry.isEditable();
+            isHovered = sliderWidget.isMouseOver(mouseX, mouseY);
             sliderWidget.render(matrices, mouseX, mouseY, delta);
         }
 
@@ -139,7 +153,7 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
             }
 
             @Override
-            protected void renderBg(MatrixStack matrices, MinecraftClient client, int mouseX, int mouseY) {
+            protected void renderBackground(MatrixStack matrices, MinecraftClient client, int mouseX, int mouseY) {
                 /*
                  * If the width is greater than 200, then fill in the gap in the middle with more button bg
                  */
@@ -162,7 +176,7 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
                     fill(matrices, x, y + 19, x + width, y + 20, getConfigError().isPresent() ? 0xffff5555 : 0xffa0a0a0);
 
                 // Render the scrubber on top of anything we've drawn
-                super.renderBg(matrices, client, mouseX, mouseY);
+                super.renderBackground(matrices, client, mouseX, mouseY);
             }
         }
     }

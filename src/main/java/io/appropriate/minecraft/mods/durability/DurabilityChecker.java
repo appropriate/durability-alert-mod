@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Formatting;
 
 public class DurabilityChecker {

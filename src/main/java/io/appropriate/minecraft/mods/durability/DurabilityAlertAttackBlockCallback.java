@@ -36,7 +36,7 @@ public class DurabilityAlertAttackBlockCallback implements AttackBlockCallback {
         ItemStack stack = player.getMainHandStack();
         BlockState block = world.getBlockState(pos);
 
-        if (player.isUsingEffectiveTool(block)) {
+        if (player.canHarvest(block)) {
             DurabilityChecker.Result result = checker.checkItemStack(stack);
 
             if (result != null) {
