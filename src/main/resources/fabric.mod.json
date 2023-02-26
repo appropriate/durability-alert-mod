@@ -36,7 +36,7 @@
   },
 
   "depends": {
-    "cloth-config2": "~5.0",
+    "cloth-config2": "~9.0",
     "fabricloader": ">=0.14.14",
     "fabric-events-interaction-v0": "*",
     "minecraft": "~1.19.3",
@@ -44,6 +44,6 @@
   },
 
   "suggests": {
-      "modmenu": "~2.0"
+      "modmenu": "~5.1"
   }
 }
