@@ -97,3 +97,8 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+
+task copyToLocalMinecraft(type: Copy, dependsOn: [build]) {
+  from project.remapJar
+  into "${System.properties["user.home"]}/Library/Application Support/minecraft/mods"
+}
