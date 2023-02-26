@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -50,7 +49,7 @@ public class DurabilityAlertAttackBlockCallback implements AttackBlockCallback {
                     }
                 }
 
-                TranslatableText message = new TranslatableText(
+                MutableText message = Text.translatable(
                     translationKey, stackName, result.getRemainingDamagePercent());
 
                 player.sendMessage(message.formatted(result.getDamageColor()), true);

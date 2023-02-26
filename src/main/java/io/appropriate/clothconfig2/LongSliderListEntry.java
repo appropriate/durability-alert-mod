@@ -2,7 +2,6 @@ package io.appropriate.minecraft.clothconfig2;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class LongSliderListEntry extends AbstractSliderListEntry<Long, LongSliderListEntry.LongSliderListCell, LongSliderListEntry> {
-    private static final Function<Long, Text> DEFAULT_TEXT_GETTER = value -> new LiteralText(String.format("Value: %d", value));
+    private static final Function<Long, Text> DEFAULT_TEXT_GETTER = value -> Text.of(String.format("Value: %d", value));
 
     public LongSliderListEntry(Text fieldName, long minimum, long maximum, List<Long> value, boolean defaultExpanded, Supplier<Optional<Text[]>> tooltipSupplier, Consumer<List<Long>> saveConsumer, Supplier<List<Long>> defaultValue, long cellDefaultValue, Text resetButtonKey, boolean requiresRestart, boolean deleteButtonEnabled, boolean insertInFront) {
         super(fieldName, minimum, maximum, value, defaultExpanded, tooltipSupplier, saveConsumer, defaultValue, cellDefaultValue, resetButtonKey, requiresRestart, deleteButtonEnabled, insertInFront, LongSliderListCell::new);
