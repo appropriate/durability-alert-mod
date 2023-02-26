@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -94,8 +93,9 @@ class DurabilityAlertConfig implements ConfigData {
             return material;
         }
 
+        // XXX: Is this method even used? I think I may have wanted to use it to display an icon?
         public Item getRepairItem() {
-            return Arrays.stream(material.getRepairIngredient().getMatchingStacksClient())
+            return Arrays.stream(material.getRepairIngredient().getMatchingStacks())
                 .findFirst()
                 .map(ItemStack::getItem)
                 .orElse(null);

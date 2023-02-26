@@ -111,7 +111,7 @@ public class DurabilityChecker {
 
         public boolean repeats(Result otherResult) {
             return otherResult != null &&
-                ItemStack.areItemsEqualIgnoreDamage(stack, otherResult.stack) &&
+                ItemStack.areItemsEqual(stack, otherResult.stack) &&
                 Objects.equals(alertCutoff, otherResult.alertCutoff);
         }
     }

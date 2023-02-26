@@ -103,8 +103,8 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isFocusedCell, float delta) {
-            sliderWidget.x = x;
-            sliderWidget.y = y;
+            sliderWidget.setX(x);
+            sliderWidget.setY(y);
             sliderWidget.setWidth(entryWidth - 12);
             sliderWidget.active = listListEntry.isEditable();
             isHovered = sliderWidget.isMouseOver(mouseX, mouseY);
@@ -163,7 +163,7 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
 
                     int offset = 100;
                     do {
-                        drawTexture(matrices, x + offset, y, 1, 46 + 0 * 20, Math.min(gap, 198), height);
+                        drawTexture(matrices, getX() + offset, getY(), 1, 46 + 0 * 20, Math.min(gap, 198), height);
 
                         offset += 198;
                         gap -= 198;
@@ -173,7 +173,7 @@ public abstract class AbstractSliderListEntry<T, C extends AbstractSliderListEnt
                 // Note: the non-error highlight color here is a bit darker
                 // than the normal highlight of 0xffe0e0e0 to let the scrubber stand out
                 if (isSelected && listListEntry.isEditable())
-                    fill(matrices, x, y + 19, x + width, y + 20, getConfigError().isPresent() ? 0xffff5555 : 0xffa0a0a0);
+                    fill(matrices, getX(), getY() + 19, getX() + width, getY() + 20, getConfigError().isPresent() ? 0xffff5555 : 0xffa0a0a0);
 
                 // Render the scrubber on top of anything we've drawn
                 super.renderBackground(matrices, client, mouseX, mouseY);

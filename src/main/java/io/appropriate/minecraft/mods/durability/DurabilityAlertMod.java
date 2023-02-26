@@ -5,8 +5,7 @@ import static me.shedaniel.autoconfig.util.Utils.setUnsafely;
 
 import java.util.Collections;
 
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
 import net.fabricmc.api.EnvType;
@@ -37,7 +36,7 @@ public class DurabilityAlertMod implements ClientModInitializer {
             (i13n, field, config, defaults, guiProvider) -> {
                 return Collections.singletonList(
                     ENTRY_BUILDER.startEnumSelector(
-                        new TranslatableText(i13n),
+                        Text.translatable(i13n),
                         DurabilityAlertConfig.Material.class,
                         getUnsafely(field, config, getUnsafely(field, defaults))
                     )
@@ -52,16 +51,16 @@ public class DurabilityAlertMod implements ClientModInitializer {
         registry.registerAnnotationProvider(
             (i13n, field, config, defaults, guiProvider) -> {
                 IntegerSliderListEntry entry = new IntegerSliderListEntry(
-                    new TranslatableText(i13n), 0, 100,
+                    Text.translatable(i13n), 0, 100,
                     getUnsafely(field, config, getUnsafely(field, defaults)),
                     false, null,
                     newValue -> setUnsafely(field, config, newValue),
                     () -> getUnsafely(field, defaults),
-                    0, new TranslatableText("text.cloth-config.reset_value"),
+                    0, Text.translatable("text.cloth-config.reset_value"),
                     false, true, false
                 );
 
-                entry.setTextGetter(number -> new LiteralText(number + "%"));
+                entry.setTextGetter(number -> Text.of(number + "%"));
 
                 return Collections.singletonList(entry);
             },

@@ -19,7 +19,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 import io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
 
@@ -167,7 +167,7 @@ class DurabilityCheckerTests {
 
         ItemStack stack = new ItemStack(Items.WOODEN_SHOVEL);
         stack.setDamage(stack.getMaxDamage() - 1);
-        stack.setCustomName(new LiteralText("Me dear old spade"));
+        stack.setCustomName(Text.of("Me dear old spade"));
         assertThat(checker.checkItemStack(stack)).isNotNull();
     }
 
