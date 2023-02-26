@@ -35,10 +35,11 @@ dependencies {
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 
-    testImplementation(platform('org.junit:junit-bom:5.7.1'))
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+    testImplementation(platform('org.junit:junit-bom:5.9.2'))
     testImplementation('org.junit.jupiter:junit-jupiter')
 
-    testImplementation "com.google.truth:truth:1.1.2"
+    testImplementation "com.google.truth:truth:1.1.3"
 
     // Work around bad interaction between MC's use of Guava and Truth's
     testRuntimeOnly "com.google.guava:guava:30.1-jre"
