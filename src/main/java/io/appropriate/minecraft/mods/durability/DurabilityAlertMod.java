@@ -3,79 +3,77 @@ package io.appropriate.minecraft.mods.durability;
 import static me.shedaniel.autoconfig.util.Utils.getUnsafely;
 import static me.shedaniel.autoconfig.util.Utils.setUnsafely;
 
+import io.appropriate.minecraft.clothconfig2.IntegerSliderListEntry;
 import java.util.Collections;
-
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.api.ClientModInitializer;
-
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-
-import io.appropriate.minecraft.clothconfig2.IntegerSliderListEntry;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 
 @Environment(EnvType.CLIENT)
 public class DurabilityAlertMod implements ClientModInitializer {
-    private static final ConfigEntryBuilder ENTRY_BUILDER = ConfigEntryBuilder.create();
+  private static final ConfigEntryBuilder ENTRY_BUILDER = ConfigEntryBuilder.create();
 
-    @Override
-    public void onInitializeClient() {
-        AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
+  @Override
+  public void onInitializeClient() {
+    AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
 
-        GuiRegistry registry = AutoConfig.getGuiRegistry(DurabilityAlertConfig.class);
+    GuiRegistry registry = AutoConfig.getGuiRegistry(DurabilityAlertConfig.class);
 
-        registry.registerPredicateProvider(
-            (i13n, field, config, defaults, guiProvider) -> {
-                return Collections.singletonList(
-                    ENTRY_BUILDER.startEnumSelector(
-                        Text.translatable(i13n),
-                        DurabilityAlertConfig.Material.class,
-                        getUnsafely(field, config, getUnsafely(field, defaults))
-                    )
-                        .setDefaultValue(() -> getUnsafely(field, defaults))
-                        .setSaveConsumer(newValue -> setUnsafely(field, config, newValue))
-                        .build()
-                );
-            },
-            field -> field.getType() == DurabilityAlertConfig.Material.class && !field.isAnnotationPresent(ConfigEntry.Gui.Excluded.class)
-        );
+    registry.registerPredicateProvider(
+        (i13n, field, config, defaults, guiProvider) -> {
+          return Collections.singletonList(
+            ENTRY_BUILDER.startEnumSelector(
+              Text.translatable(i13n),
+              DurabilityAlertConfig.Material.class,
+              getUnsafely(field, config, getUnsafely(field, defaults))
+            )
+              .setDefaultValue(() -> getUnsafely(field, defaults))
+              .setSaveConsumer(newValue -> setUnsafely(field, config, newValue))
+              .build()
+          );
+        },
+        field -> {
+          return field.getType() == DurabilityAlertConfig.Material.class
+              && !field.isAnnotationPresent(ConfigEntry.Gui.Excluded.class);
+        }
+    );
 
-        registry.registerAnnotationProvider(
-            (i13n, field, config, defaults, guiProvider) -> {
-                IntegerSliderListEntry entry = new IntegerSliderListEntry(
-                    Text.translatable(i13n), 0, 100,
-                    getUnsafely(field, config, getUnsafely(field, defaults)),
-                    false, null,
-                    newValue -> setUnsafely(field, config, newValue),
-                    () -> getUnsafely(field, defaults),
-                    0, Text.translatable("text.cloth-config.reset_value"),
-                    false, true, false
-                );
+    registry.registerAnnotationProvider(
+        (i13n, field, config, defaults, guiProvider) -> {
+          IntegerSliderListEntry entry = new IntegerSliderListEntry(
+              Text.translatable(i13n), 0, 100,
+              getUnsafely(field, config, getUnsafely(field, defaults)),
+              false, null,
+              newValue -> setUnsafely(field, config, newValue),
+              () -> getUnsafely(field, defaults),
+              0, Text.translatable("text.cloth-config.reset_value"),
+              false, true, false
+          );
 
-                entry.setTextGetter(number -> Text.of(number + "%"));
+          entry.setTextGetter(number -> Text.of(number + "%"));
 
-                return Collections.singletonList(entry);
-            },
-            DurabilityAlertConfig.IntSliderList.class
-        );
+          return Collections.singletonList(entry);
+        },
+        DurabilityAlertConfig.IntSliderList.class
+    );
 
-        ConfigHolder<DurabilityAlertConfig> configHolder =
-            AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
+    ConfigHolder<DurabilityAlertConfig> configHolder =
+        AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
 
-        final DurabilityAlertAttackBlockCallback callback =
-            DurabilityAlertAttackBlockCallback.register(configHolder.getConfig());
+    final DurabilityAlertAttackBlockCallback callback =
+        DurabilityAlertAttackBlockCallback.register(configHolder.getConfig());
 
-        configHolder.registerSaveListener((manager, newData) -> {
-            callback.updateConfig(newData);
-            return ActionResult.SUCCESS;
-        });
-    }
+    configHolder.registerSaveListener((manager, newData) -> {
+      callback.updateConfig(newData);
+      return ActionResult.SUCCESS;
+    });
+  }
 }
