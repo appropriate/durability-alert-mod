@@ -9,16 +9,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.text.Text;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-import me.shedaniel.clothconfig2.gui.entries.SelectionListEntry;
+import me.shedaniel.clothconfig2.gui.entries.SelectionListEntry.Translatable;
 
 @Config(name = "durability-alert-mod")
 class DurabilityAlertConfig implements ConfigData {
@@ -73,7 +70,7 @@ class DurabilityAlertConfig implements ConfigData {
         return cutoff != null && cutoff >= 0 && cutoff <= 100;
     }
 
-    static enum Material implements SelectionListEntry.Translatable {
+    static enum Material implements Translatable {
         Wood(ToolMaterials.WOOD),
         Stone(ToolMaterials.STONE),
         Iron(ToolMaterials.IRON),
@@ -89,14 +86,6 @@ class DurabilityAlertConfig implements ConfigData {
 
         public ToolMaterials getMaterial() {
             return material;
-        }
-
-        // XXX: Is this method even used? I think I may have wanted to use it to display an icon?
-        public Item getRepairItem() {
-            return Arrays.stream(material.getRepairIngredient().getMatchingStacks())
-                .findFirst()
-                .map(ItemStack::getItem)
-                .orElse(null);
         }
 
         public String getKey() {
