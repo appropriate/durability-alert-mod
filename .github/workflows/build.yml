@@ -39,6 +39,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
-          path: |
-            build/libs/
-            build/reports/
+          path: build/libs/
+      - name: capture build reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: Reports_java-${{matrix.java}}_${{matrix.os}}
+          path: build/reports/
