@@ -3,14 +3,18 @@ package io.appropriate.minecraft.mods.durability;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import static org.junit.jupiter.api.Named.named;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import net.minecraft.Bootstrap;
@@ -18,7 +22,20 @@ import net.minecraft.SharedConstants;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import static net.minecraft.item.Items.DIAMOND_AXE;
+import static net.minecraft.item.Items.DIAMOND_PICKAXE;
+import static net.minecraft.item.Items.SHEARS;
+import static net.minecraft.item.Items.WOODEN_SHOVEL;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.ToolMaterials;
+import static net.minecraft.item.ToolMaterials.DIAMOND;
+import static net.minecraft.item.ToolMaterials.GOLD;
+import static net.minecraft.item.ToolMaterials.IRON;
+import static net.minecraft.item.ToolMaterials.NETHERITE;
+import static net.minecraft.item.ToolMaterials.STONE;
+import static net.minecraft.item.ToolMaterials.WOOD;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 
 import io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
@@ -28,6 +45,18 @@ class DurabilityCheckerTests {
     static void initMinecraft() {
         SharedConstants.createGameVersion();
         Bootstrap.initialize();
+    }
+
+    private static Arguments itemArguments(Item item) {
+        return arguments(named(item.getName().getString(), item));
+    }
+
+    private static Stream<Arguments> toolsByMaterials(Set<ToolMaterial> materials) {
+        return Registries.ITEM.stream()
+            .filter(ToolItem.class::isInstance)
+            .map(ToolItem.class::cast)
+            .filter(item -> materials.contains(item.getMaterial()))
+            .map(DurabilityCheckerTests::itemArguments);
     }
 
     @DisplayName("Checking a fresh tool returns null")
@@ -40,33 +69,10 @@ class DurabilityCheckerTests {
         assertThat(result).isNull();
     }
 
-    private static Stream<Item> returnsNullForFreshTools() {
-        return Stream.of(
-            Items.DIAMOND_AXE,
-            Items.DIAMOND_PICKAXE,
-            Items.DIAMOND_SHOVEL,
-            Items.DIAMOND_SWORD,
-            Items.GOLDEN_AXE,
-            Items.GOLDEN_PICKAXE,
-            Items.GOLDEN_SHOVEL,
-            Items.GOLDEN_SWORD,
-            Items.IRON_AXE,
-            Items.IRON_PICKAXE,
-            Items.IRON_SHOVEL,
-            Items.IRON_SWORD,
-            Items.NETHERITE_AXE,
-            Items.NETHERITE_PICKAXE,
-            Items.NETHERITE_SHOVEL,
-            Items.NETHERITE_SWORD,
-            Items.SHEARS,
-            Items.STONE_AXE,
-            Items.STONE_PICKAXE,
-            Items.STONE_SHOVEL,
-            Items.STONE_SWORD,
-            Items.WOODEN_AXE,
-            Items.WOODEN_PICKAXE,
-            Items.WOODEN_SHOVEL,
-            Items.WOODEN_SWORD
+    private static Stream<Arguments> returnsNullForFreshTools() {
+        return Stream.concat(
+            toolsByMaterials(Set.of(ToolMaterials.values())),
+            Stream.of(itemArguments(SHEARS))
         );
     }
 
@@ -81,21 +87,10 @@ class DurabilityCheckerTests {
         assertThat(result).isNull();
     }
 
-    private static Stream<Item> returnsNullForUnimportantMaterials() {
-        return Stream.of(
-            Items.IRON_AXE,
-            Items.IRON_PICKAXE,
-            Items.IRON_SHOVEL,
-            Items.IRON_SWORD,
-            Items.SHEARS,
-            Items.STONE_AXE,
-            Items.STONE_PICKAXE,
-            Items.STONE_SHOVEL,
-            Items.STONE_SWORD,
-            Items.WOODEN_AXE,
-            Items.WOODEN_PICKAXE,
-            Items.WOODEN_SHOVEL,
-            Items.WOODEN_SWORD
+    private static Stream<Arguments> returnsNullForUnimportantMaterials() {
+        return Stream.concat(
+            toolsByMaterials(Set.of(IRON, STONE, WOOD)),
+            Stream.of(itemArguments(SHEARS))
         );
     }
 
@@ -110,21 +105,8 @@ class DurabilityCheckerTests {
         assertThat(result).isNotNull();
     }
 
-    private static Stream<Item> returnsResultForImportantMaterials() {
-        return Stream.of(
-            Items.DIAMOND_AXE,
-            Items.DIAMOND_PICKAXE,
-            Items.DIAMOND_SHOVEL,
-            Items.DIAMOND_SWORD,
-            Items.GOLDEN_AXE,
-            Items.GOLDEN_PICKAXE,
-            Items.GOLDEN_SHOVEL,
-            Items.GOLDEN_SWORD,
-            Items.NETHERITE_AXE,
-            Items.NETHERITE_PICKAXE,
-            Items.NETHERITE_SHOVEL,
-            Items.NETHERITE_SWORD
-        );
+    private static Stream<Arguments> returnsResultForImportantMaterials() {
+        return toolsByMaterials(Set.of(NETHERITE, DIAMOND, GOLD));
     }
 
     @DisplayName("Checking the same item twice doesn't alert unless new cutoff is reached")
@@ -133,7 +115,7 @@ class DurabilityCheckerTests {
         DurabilityChecker checker = new DurabilityChecker();
 
         // First check should be non-null
-        ItemStack stack = new ItemStack(Items.DIAMOND_PICKAXE);
+        ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
         stack.setDamage(stack.getMaxDamage() / 2 - 1);
         assertThat(checker.checkItemStack(stack)).isNotNull();
 
@@ -150,12 +132,12 @@ class DurabilityCheckerTests {
         DurabilityChecker checker = new DurabilityChecker();
 
         // First check should be non-null
-        ItemStack stack = new ItemStack(Items.DIAMOND_PICKAXE);
+        ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
         stack.setDamage(stack.getMaxDamage() / 2 - 1);
         assertThat(checker.checkItemStack(stack)).isNotNull();
 
         // Second check should also be non-null
-        ItemStack other = new ItemStack(Items.DIAMOND_AXE);
+        ItemStack other = new ItemStack(DIAMOND_AXE);
         other.setDamage(other.getMaxDamage() / 2 - 1);
         assertThat(checker.checkItemStack(other)).isNotNull();
     }
@@ -165,7 +147,7 @@ class DurabilityCheckerTests {
     void returnsResultCheckingNamedItemWithUnimportantMaterial() {
         DurabilityChecker checker = new DurabilityChecker();
 
-        ItemStack stack = new ItemStack(Items.WOODEN_SHOVEL);
+        ItemStack stack = new ItemStack(WOODEN_SHOVEL);
         stack.setDamage(stack.getMaxDamage() - 1);
         stack.setCustomName(Text.of("Me dear old spade"));
         assertThat(checker.checkItemStack(stack)).isNotNull();
@@ -176,7 +158,7 @@ class DurabilityCheckerTests {
     void returnsResultCheckingEnchantedItemWithUnimportantMaterial() {
         DurabilityChecker checker = new DurabilityChecker();
 
-        ItemStack stack = new ItemStack(Items.WOODEN_SHOVEL);
+        ItemStack stack = new ItemStack(WOODEN_SHOVEL);
         stack.setDamage(stack.getMaxDamage() - 1);
         stack.addEnchantment(Enchantments.MENDING, 1);
         assertThat(checker.checkItemStack(stack)).isNotNull();
