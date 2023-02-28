@@ -35,8 +35,8 @@ public class DurabilityAlertMod implements ClientModInitializer {
    * Initializes the mod on client startup.
    *
    * <p>Registers handlers related to the mod's configuration screen and settings and installs a
-   * {@link DurabilityAlertAttackBlockCallback} to be notified each time a held item is used to
-   * attack a block.
+   * {@link DurabilityAlertAttackCallback} to be notified each time a held item is used to attack a
+   * block or entity.
    */
   @Override
   public void onInitializeClient() {
@@ -85,8 +85,8 @@ public class DurabilityAlertMod implements ClientModInitializer {
     ConfigHolder<DurabilityAlertConfig> configHolder =
         AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
 
-    final DurabilityAlertAttackBlockCallback callback =
-        DurabilityAlertAttackBlockCallback.register(configHolder.getConfig());
+    final DurabilityAlertAttackCallback callback =
+        DurabilityAlertAttackCallback.register(configHolder.getConfig());
 
     configHolder.registerSaveListener((manager, newData) -> {
       callback.updateConfig(newData);
