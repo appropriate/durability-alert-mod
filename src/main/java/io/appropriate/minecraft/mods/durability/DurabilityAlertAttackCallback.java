@@ -97,6 +97,10 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
   }
 
   private void checkStackInHand(PlayerEntity player, Hand hand) {
+    if (player.isSpectator()) {
+      return;
+    }
+
     ItemStack stack = player.getStackInHand(hand);
     if (stack == null) {
       return;
