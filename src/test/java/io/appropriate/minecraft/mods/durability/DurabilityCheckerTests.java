@@ -43,6 +43,18 @@ class DurabilityCheckerTests {
     Bootstrap.initialize();
   }
 
+  @DisplayName("Returns null when config is disabled")
+  @Test
+  void returnsNullWhenDisabled() {
+    DurabilityAlertConfig config = new DurabilityAlertConfig();
+    config.disabled = true;
+    DurabilityChecker checker = new DurabilityChecker(config);
+
+    ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
+    stack.setDamage(stack.getMaxDamage() - 1);
+    assertThat(checker.checkItemStack(stack)).isNull();
+  }
+
   private static Arguments itemArguments(Item item) {
     return arguments(named(item.getName().getString(), item));
   }
