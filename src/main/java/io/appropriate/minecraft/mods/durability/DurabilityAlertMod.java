@@ -17,10 +17,27 @@ import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
+/**
+ * A Minecraft client-side mod that alerts a user each time the durability of a held item falls
+ * below certain durability thresholds.
+ */
 @Environment(EnvType.CLIENT)
 public class DurabilityAlertMod implements ClientModInitializer {
   private static final ConfigEntryBuilder ENTRY_BUILDER = ConfigEntryBuilder.create();
 
+  /**
+   * Creates a new instance of the mod.
+   */
+  public DurabilityAlertMod() {
+  }
+
+  /**
+   * Initializes the mod on client startup.
+   *
+   * <p>Registers handlers related to the mod's configuration screen and settings and installs a
+   * {@link DurabilityAlertAttackBlockCallback} to be notified each time a held item is used to
+   * attack a block.
+   */
   @Override
   public void onInitializeClient() {
     AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
