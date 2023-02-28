@@ -46,11 +46,11 @@ class DurabilityCheckerTests {
   @DisplayName("Returns null when config is disabled")
   @Test
   void returnsNullWhenDisabled() {
-    DurabilityAlertConfig config = new DurabilityAlertConfig();
+    var config = new DurabilityAlertConfig();
     config.disabled = true;
-    DurabilityChecker checker = new DurabilityChecker(config);
+    var checker = new DurabilityChecker(config);
 
-    ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
+    var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() - 1);
     assertThat(checker.checkItemStack(stack)).isNull();
   }
@@ -71,9 +71,9 @@ class DurabilityCheckerTests {
   @ParameterizedTest
   @MethodSource
   void returnsNullForFreshTools(Item item) {
-    DurabilityChecker checker = new DurabilityChecker();
-    ItemStack stack = new ItemStack(item);
-    Result result = checker.checkItemStack(stack);
+    var checker = new DurabilityChecker();
+    var stack = new ItemStack(item);
+    var result = checker.checkItemStack(stack);
     assertThat(result).isNull();
   }
 
@@ -88,10 +88,10 @@ class DurabilityCheckerTests {
   @ParameterizedTest
   @MethodSource
   void returnsNullForUnimportantMaterials(Item item) {
-    DurabilityChecker checker = new DurabilityChecker();
-    ItemStack stack = new ItemStack(item);
+    var checker = new DurabilityChecker();
+    var stack = new ItemStack(item);
     stack.setDamage(stack.getMaxDamage() - 1);
-    Result result = checker.checkItemStack(stack);
+    var result = checker.checkItemStack(stack);
     assertThat(result).isNull();
   }
 
@@ -106,10 +106,10 @@ class DurabilityCheckerTests {
   @ParameterizedTest
   @MethodSource
   void returnsResultForImportantMaterials(Item item) {
-    DurabilityChecker checker = new DurabilityChecker();
-    ItemStack stack = new ItemStack(item);
+    var checker = new DurabilityChecker();
+    var stack = new ItemStack(item);
     stack.setDamage(stack.getMaxDamage() - 1);
-    Result result = checker.checkItemStack(stack);
+    var result = checker.checkItemStack(stack);
     assertThat(result).isNotNull();
   }
 
@@ -120,16 +120,16 @@ class DurabilityCheckerTests {
   @DisplayName("Checking the same item twice doesn't alert unless new cutoff is reached")
   @Test
   void returnsNullCheckingSameItemWithLittleAdditionalDamage() {
-    DurabilityChecker checker = new DurabilityChecker();
+    var checker = new DurabilityChecker();
 
     // First check should be non-null
-    ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
+    var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() / 2 - 1);
     assertThat(checker.checkItemStack(stack)).isNotNull();
 
     // Second check should be null; perform on a copy since we expect a
     // distinct ItemStack each time we query the main hand inventory
-    ItemStack copy = stack.copy();
+    var copy = stack.copy();
     copy.setDamage(copy.getMaxDamage() / 2 - 2);
     assertThat(checker.checkItemStack(copy)).isNull();
   }
@@ -137,15 +137,15 @@ class DurabilityCheckerTests {
   @DisplayName("Checking a different item with the same damage alerts")
   @Test
   void returnsResultCheckingDifferentItemWithSameDamage() {
-    DurabilityChecker checker = new DurabilityChecker();
+    var checker = new DurabilityChecker();
 
     // First check should be non-null
-    ItemStack stack = new ItemStack(DIAMOND_PICKAXE);
+    var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() / 2 - 1);
     assertThat(checker.checkItemStack(stack)).isNotNull();
 
     // Second check should also be non-null
-    ItemStack other = new ItemStack(DIAMOND_AXE);
+    var other = new ItemStack(DIAMOND_AXE);
     other.setDamage(other.getMaxDamage() / 2 - 1);
     assertThat(checker.checkItemStack(other)).isNotNull();
   }
@@ -153,9 +153,9 @@ class DurabilityCheckerTests {
   @DisplayName("Checking a named item with an unimportant material alerts")
   @Test
   void returnsResultCheckingNamedItemWithUnimportantMaterial() {
-    DurabilityChecker checker = new DurabilityChecker();
+    var checker = new DurabilityChecker();
 
-    ItemStack stack = new ItemStack(WOODEN_SHOVEL);
+    var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
     stack.setCustomName(Text.of("Me dear old spade"));
     assertThat(checker.checkItemStack(stack)).isNotNull();
@@ -164,9 +164,9 @@ class DurabilityCheckerTests {
   @DisplayName("Checking an enchanted item with an unimportant material alerts")
   @Test
   void returnsResultCheckingEnchantedItemWithUnimportantMaterial() {
-    DurabilityChecker checker = new DurabilityChecker();
+    var checker = new DurabilityChecker();
 
-    ItemStack stack = new ItemStack(WOODEN_SHOVEL);
+    var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
     stack.addEnchantment(Enchantments.MENDING, 1);
     assertThat(checker.checkItemStack(stack)).isNotNull();

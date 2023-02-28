@@ -8,7 +8,6 @@ import java.util.Collections;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.ClientModInitializer;
@@ -42,7 +41,7 @@ public class DurabilityAlertMod implements ClientModInitializer {
   public void onInitializeClient() {
     AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
 
-    GuiRegistry registry = AutoConfig.getGuiRegistry(DurabilityAlertConfig.class);
+    var registry = AutoConfig.getGuiRegistry(DurabilityAlertConfig.class);
 
     registry.registerPredicateProvider(
         (i13n, field, config, defaults, guiProvider) -> {
@@ -82,11 +81,9 @@ public class DurabilityAlertMod implements ClientModInitializer {
         DurabilityAlertConfig.IntSliderList.class
     );
 
-    ConfigHolder<DurabilityAlertConfig> configHolder =
-        AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
+    var configHolder = AutoConfig.getConfigHolder(DurabilityAlertConfig.class);
 
-    final DurabilityAlertAttackCallback callback =
-        DurabilityAlertAttackCallback.register(configHolder.getConfig());
+    final var callback = DurabilityAlertAttackCallback.register(configHolder.getConfig());
 
     configHolder.registerSaveListener((manager, newData) -> {
       callback.updateConfig(newData);

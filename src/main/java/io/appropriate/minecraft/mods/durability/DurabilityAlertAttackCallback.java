@@ -31,7 +31,7 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
    * @return a new callback
    */
   public static DurabilityAlertAttackCallback register(DurabilityAlertConfig config) {
-    DurabilityAlertAttackCallback callback = new DurabilityAlertAttackCallback(config);
+    var callback = new DurabilityAlertAttackCallback(config);
     AttackBlockCallback.EVENT.register(callback);
     AttackEntityCallback.EVENT.register(callback);
     return callback;
@@ -101,18 +101,18 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
       return;
     }
 
-    ItemStack stack = player.getStackInHand(hand);
+    var stack = player.getStackInHand(hand);
     if (stack == null) {
       return;
     }
 
-    DurabilityChecker.Result result = checker.checkItemStack(stack);
+    var result = checker.checkItemStack(stack);
     if (result == null) {
       return;
     }
 
-    String translationKey = "messages.durability-alert-mod.alert";
-    Text stackName = stack.getName();
+    var translationKey = "messages.durability-alert-mod.alert";
+    var stackName = stack.getName();
 
     if (stack.hasCustomName()) {
       translationKey = "messages.durability-alert-mod.alert-named";
@@ -121,7 +121,7 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
       }
     }
 
-    MutableText message = Text.translatable(
+    var message = Text.translatable(
         translationKey, stackName, result.getRemainingDamagePercent());
 
     player.sendMessage(message.formatted(result.getDamageColor()), true);

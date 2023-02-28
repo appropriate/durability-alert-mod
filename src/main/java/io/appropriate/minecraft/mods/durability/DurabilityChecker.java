@@ -52,7 +52,7 @@ public class DurabilityChecker {
       return null;
     }
 
-    Result result = new Result(stack);
+    var result = new Result(stack);
 
     if (result.alertCutoff == null || result.repeats(previous)) {
       return null;
@@ -84,7 +84,7 @@ public class DurabilityChecker {
       return true;
     }
 
-    ToolMaterial material = ToolItem.class.cast(stack.getItem()).getMaterial();
+    var material = ToolItem.class.cast(stack.getItem()).getMaterial();
     if (!ToolMaterials.class.isInstance(material)) {
       return false;
     }
