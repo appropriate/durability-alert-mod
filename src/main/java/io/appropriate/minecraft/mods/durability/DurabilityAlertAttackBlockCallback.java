@@ -64,7 +64,7 @@ public class DurabilityAlertAttackBlockCallback implements AttackBlockCallback {
    */
   public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockPos pos,
       Direction direction) {
-    ItemStack stack = player.getMainHandStack();
+    ItemStack stack = player.getStackInHand(hand);
     BlockState block = world.getBlockState(pos);
 
     if (player.canHarvest(block)) {
