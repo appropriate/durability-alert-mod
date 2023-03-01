@@ -19,7 +19,7 @@ import net.minecraft.text.Text;
 public class LongSliderListEntry extends AbstractSliderListEntry<
     Long, LongSliderListEntry.LongSliderListCell, LongSliderListEntry> {
   private static final Function<Long, Text> DEFAULT_TEXT_GETTER =
-      value -> Text.of(String.format("Value: %d", value));
+      value -> Text.literal(String.format("Value: %d", value));
 
   /**
    * Builds a new list entry for a given field, containing cells for each child entry.

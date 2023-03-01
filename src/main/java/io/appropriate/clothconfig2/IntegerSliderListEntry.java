@@ -19,7 +19,7 @@ import net.minecraft.text.Text;
 public class IntegerSliderListEntry extends AbstractSliderListEntry<
     Integer, IntegerSliderListEntry.IntegerSliderListCell, IntegerSliderListEntry> {
   private static final Function<Integer, Text> DEFAULT_TEXT_GETTER =
-      value -> Text.of(String.format("Value: %d", value));
+      value -> Text.literal(String.format("Value: %d", value));
 
   /**
    * Builds a new list entry for a given field, containing cells for each child entry.

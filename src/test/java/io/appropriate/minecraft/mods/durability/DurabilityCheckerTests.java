@@ -14,6 +14,7 @@ import static net.minecraft.item.ToolMaterials.IRON;
 import static net.minecraft.item.ToolMaterials.NETHERITE;
 import static net.minecraft.item.ToolMaterials.STONE;
 import static net.minecraft.item.ToolMaterials.WOOD;
+import static net.minecraft.text.Text.literal;
 import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -32,7 +33,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -167,7 +167,7 @@ class DurabilityCheckerTests {
 
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
-    stack.setCustomName(Text.of("Me dear old spade"));
+    stack.setCustomName(literal("Me dear old spade"));
     assertThat(checker.checkItemStack(stack)).isPresent();
   }
 
@@ -180,7 +180,7 @@ class DurabilityCheckerTests {
 
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
-    stack.setCustomName(Text.of("Me dear old spade"));
+    stack.setCustomName(literal("Me dear old spade"));
     assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 

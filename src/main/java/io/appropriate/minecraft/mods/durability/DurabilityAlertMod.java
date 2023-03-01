@@ -2,6 +2,8 @@ package io.appropriate.minecraft.mods.durability;
 
 import static me.shedaniel.autoconfig.util.Utils.getUnsafely;
 import static me.shedaniel.autoconfig.util.Utils.setUnsafely;
+import static net.minecraft.text.Text.literal;
+import static net.minecraft.text.Text.translatable;
 
 import io.appropriate.minecraft.clothconfig2.IntegerSliderListEntry;
 import java.util.Collections;
@@ -13,7 +15,6 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
 /**
@@ -47,7 +48,7 @@ public class DurabilityAlertMod implements ClientModInitializer {
         (i13n, field, config, defaults, guiProvider) -> {
           return Collections.singletonList(
             ENTRY_BUILDER.startEnumSelector(
-              Text.translatable(i13n),
+              translatable(i13n),
               DurabilityAlertConfig.Material.class,
               getUnsafely(field, config, getUnsafely(field, defaults))
             )
@@ -65,16 +66,16 @@ public class DurabilityAlertMod implements ClientModInitializer {
     registry.registerAnnotationProvider(
         (i13n, field, config, defaults, guiProvider) -> {
           IntegerSliderListEntry entry = new IntegerSliderListEntry(
-              Text.translatable(i13n), 0, 100,
+              translatable(i13n), 0, 100,
               getUnsafely(field, config, getUnsafely(field, defaults)),
               false, null,
               newValue -> setUnsafely(field, config, newValue),
               () -> getUnsafely(field, defaults),
-              0, Text.translatable("text.cloth-config.reset_value"),
+              0, translatable("text.cloth-config.reset_value"),
               false, true, false
           );
 
-          entry.setTextGetter(number -> Text.of(number + "%"));
+          entry.setTextGetter(number -> literal(number + "%"));
 
           return Collections.singletonList(entry);
         },
