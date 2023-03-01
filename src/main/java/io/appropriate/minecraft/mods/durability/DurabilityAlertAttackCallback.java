@@ -116,8 +116,8 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
 
     if (stack.hasCustomName()) {
       translationKey = "messages.durability-alert-mod.alert-named";
-      if (stackName instanceof MutableText) {
-        stackName = ((MutableText) stackName).formatted(Formatting.ITALIC);
+      if (stackName instanceof MutableText mt) {
+        stackName = mt.formatted(Formatting.ITALIC);
       }
     }
 
