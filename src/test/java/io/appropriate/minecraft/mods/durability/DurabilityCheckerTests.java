@@ -268,27 +268,40 @@ class DurabilityCheckerTests {
   @DisplayName("Correctly calculates damage color")
   @ParameterizedTest
   @MethodSource
-  void correctlyCalculatesDamageColor(int percent, Formatting expectedColor) {
+  void correctlyCalculatesDamageColor(ColorExpectation exp) {
     var config = new DurabilityAlertConfig();
     config.alertCutoffs = List.of(100);
     var checker = new DurabilityChecker(config);
 
     var stack = new ItemStack(DIAMOND_PICKAXE);
-    stack.setDamage((100 - percent) * stack.getMaxDamage() / 100);
+    stack.setDamage((100 - exp.percent) * stack.getMaxDamage() / 100);
 
     var result = checker.checkItemStack(stack);
     assertThat(result).isPresent();
-    assertThat(result.get().getDamageColor()).isEqualTo(expectedColor);
+    assertThat(result.get().getDamageColor()).isEqualTo(exp.expectedColor);
+  }
+
+  record ColorExpectation(int percent, Formatting expectedColor) {
+    @Override
+    public String toString() {
+      return String.format("%d%% → %s", percent, expectedColor.getName());
+    }
   }
 
   static Stream<Arguments> correctlyCalculatesDamageColor() {
     var rnd = new Random();
 
     return Stream.of(
-            rnd.ints(4, 0, 15).boxed().map(n -> arguments(n, Formatting.RED)),
-            rnd.ints(4, 16, 40).boxed().map(n -> arguments(n, Formatting.GOLD)),
-            rnd.ints(4, 41, 75).boxed().map(n -> arguments(n, Formatting.YELLOW)),
-            rnd.ints(4, 76, 100).boxed().map(n -> arguments(n, Formatting.GREEN))
+            randomColorExpectations(rnd, 0, 15, Formatting.RED),
+            randomColorExpectations(rnd, 16, 40, Formatting.GOLD),
+            randomColorExpectations(rnd, 41, 75, Formatting.YELLOW),
+            randomColorExpectations(rnd, 76, 100, Formatting.GREEN)
         ).flatMap(s -> s);
+  }
+
+  static Stream<Arguments>randomColorExpectations(Random rnd, int lower, int upper,
+      Formatting expectedColor) {
+    return rnd.ints(4, lower, upper).boxed()
+        .map(n -> arguments(new ColorExpectation(n, expectedColor)));
   }
 }
