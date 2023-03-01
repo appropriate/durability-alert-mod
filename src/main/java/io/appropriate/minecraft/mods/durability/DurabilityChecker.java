@@ -55,7 +55,7 @@ public class DurabilityChecker {
 
     var result = new Result(stack);
 
-    if (result.alertCutoff == null || result.repeats(previous)) {
+    if (result.alertCutoff.isEmpty() || result.repeats(previous)) {
       return Optional.empty();
     }
 
@@ -99,9 +99,9 @@ public class DurabilityChecker {
    * damage level.
    */
   public class Result {
-    private ItemStack stack;
-    private int remainingDamagePercent;
-    private Integer alertCutoff;
+    private final ItemStack stack;
+    private final int remainingDamagePercent;
+    private final Optional<Integer> alertCutoff;
 
     private Result(ItemStack stack) {
       this.stack = stack;
@@ -115,11 +115,10 @@ public class DurabilityChecker {
       );
     }
 
-    private Integer findAlertCutoff() {
+    private Optional<Integer> findAlertCutoff() {
       return DurabilityChecker.this.alertCutoffs()
         .filter(cutoff -> cutoff >= remainingDamagePercent)
-        .findFirst()
-        .orElse(null);
+        .findFirst();
     }
 
     /**
