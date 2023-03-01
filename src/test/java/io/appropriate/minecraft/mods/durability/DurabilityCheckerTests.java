@@ -1,7 +1,9 @@
 package io.appropriate.minecraft.mods.durability;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
+import static com.google.common.truth.Truth8.assertThat;
+import static net.minecraft.enchantment.Enchantments.MENDING;
+import static net.minecraft.item.Items.BEEF;
 import static net.minecraft.item.Items.DIAMOND_AXE;
 import static net.minecraft.item.Items.DIAMOND_PICKAXE;
 import static net.minecraft.item.Items.SHEARS;
@@ -15,20 +17,15 @@ import static net.minecraft.item.ToolMaterials.WOOD;
 import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import io.appropriate.minecraft.mods.durability.DurabilityChecker.Result;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import net.minecraft.Bootstrap;
 import net.minecraft.SharedConstants;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
@@ -60,7 +57,7 @@ class DurabilityCheckerTests {
 
     var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() - 1);
-    assertThat(checker.checkItemStack(stack)).isNull();
+    assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 
   private static Arguments itemArguments(Item item) {
@@ -82,7 +79,7 @@ class DurabilityCheckerTests {
     var checker = new DurabilityChecker();
     var stack = new ItemStack(item);
     var result = checker.checkItemStack(stack);
-    assertThat(result).isNull();
+    assertThat(result).isEmpty();
   }
 
   private static Stream<Arguments> returnsNullForFreshTools() {
@@ -100,7 +97,7 @@ class DurabilityCheckerTests {
     var stack = new ItemStack(item);
     stack.setDamage(stack.getMaxDamage() - 1);
     var result = checker.checkItemStack(stack);
-    assertThat(result).isNull();
+    assertThat(result).isEmpty();
   }
 
   private static Stream<Arguments> returnsNullForUnimportantMaterials() {
@@ -118,7 +115,7 @@ class DurabilityCheckerTests {
     var stack = new ItemStack(item);
     stack.setDamage(stack.getMaxDamage() - 1);
     var result = checker.checkItemStack(stack);
-    assertThat(result).isNotNull();
+    assertThat(result).isPresent();
   }
 
   private static Stream<Arguments> returnsResultForImportantMaterials() {
@@ -133,18 +130,18 @@ class DurabilityCheckerTests {
     // First check should be non-null
     var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() / 2 - 1);
-    assertThat(checker.checkItemStack(stack)).isNotNull();
+    assertThat(checker.checkItemStack(stack)).isPresent();
 
     // Second check should be null; perform on a copy since we expect a
     // distinct ItemStack each time we query the main hand inventory
     var copy = stack.copy();
     copy.setDamage(copy.getMaxDamage() / 2 - 2);
-    assertThat(checker.checkItemStack(copy)).isNull();
+    assertThat(checker.checkItemStack(copy)).isEmpty();
 
     // Third check should be non-null
     var copy2 = stack.copy();
     copy2.setDamage(copy2.getMaxDamage() - 1);
-    assertThat(checker.checkItemStack(copy2)).isNotNull();
+    assertThat(checker.checkItemStack(copy2)).isPresent();
   }
 
   @DisplayName("Checking a different item with the same damage alerts")
@@ -155,12 +152,12 @@ class DurabilityCheckerTests {
     // First check should be non-null
     var stack = new ItemStack(DIAMOND_PICKAXE);
     stack.setDamage(stack.getMaxDamage() / 2 - 1);
-    assertThat(checker.checkItemStack(stack)).isNotNull();
+    assertThat(checker.checkItemStack(stack)).isPresent();
 
     // Second check should also be non-null
     var other = new ItemStack(DIAMOND_AXE);
     other.setDamage(other.getMaxDamage() / 2 - 1);
-    assertThat(checker.checkItemStack(other)).isNotNull();
+    assertThat(checker.checkItemStack(other)).isPresent();
   }
 
   @DisplayName("Checking a named low-tier item alerts")
@@ -171,7 +168,7 @@ class DurabilityCheckerTests {
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
     stack.setCustomName(Text.of("Me dear old spade"));
-    assertThat(checker.checkItemStack(stack)).isNotNull();
+    assertThat(checker.checkItemStack(stack)).isPresent();
   }
 
   @DisplayName("Checking a named low-tier item does not alert if alertAllNamed is false")
@@ -184,7 +181,7 @@ class DurabilityCheckerTests {
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
     stack.setCustomName(Text.of("Me dear old spade"));
-    assertThat(checker.checkItemStack(stack)).isNull();
+    assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 
   @DisplayName("Checking an enchanted low-tier item alerts")
@@ -194,8 +191,8 @@ class DurabilityCheckerTests {
 
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
-    stack.addEnchantment(Enchantments.MENDING, 1);
-    assertThat(checker.checkItemStack(stack)).isNotNull();
+    stack.addEnchantment(MENDING, 1);
+    assertThat(checker.checkItemStack(stack)).isPresent();
   }
 
   @DisplayName("Checking an enchanted low-tier item does not alert if alertAllEnchanted is false")
@@ -207,8 +204,8 @@ class DurabilityCheckerTests {
 
     var stack = new ItemStack(WOODEN_SHOVEL);
     stack.setDamage(stack.getMaxDamage() - 1);
-    stack.addEnchantment(Enchantments.MENDING, 1);
-    assertThat(checker.checkItemStack(stack)).isNull();
+    stack.addEnchantment(MENDING, 1);
+    assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 
   @DisplayName("Checking an item with an exotic material does not alert")
@@ -218,7 +215,7 @@ class DurabilityCheckerTests {
 
     var beefShovel = new ShovelItem(new Beef(), 0.0f, 0.0f, new Item.Settings());
     var stack = new ItemStack(beefShovel);
-    assertThat(checker.checkItemStack(stack)).isNull();
+    assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 
   class Beef implements ToolMaterial {
@@ -243,7 +240,7 @@ class DurabilityCheckerTests {
     }
 
     public Ingredient getRepairIngredient() {
-      return Ingredient.ofItems(Items.BEEF);
+      return Ingredient.ofItems(BEEF);
     }
   }
 
@@ -259,7 +256,8 @@ class DurabilityCheckerTests {
     stack.setDamage((100 - percent) * stack.getMaxDamage() / 100);
 
     var result = checker.checkItemStack(stack);
-    assertThat(result.getRemainingDamagePercent()).isEqualTo(percent);
+    assertThat(result).isPresent();
+    assertThat(result.get().getRemainingDamagePercent()).isEqualTo(percent);
   }
 
   static IntStream correctlyCalculatesRemainingDamage() {
@@ -279,7 +277,8 @@ class DurabilityCheckerTests {
     stack.setDamage((100 - percent) * stack.getMaxDamage() / 100);
 
     var result = checker.checkItemStack(stack);
-    assertThat(result.getDamageColor()).isEqualTo(expectedColor);
+    assertThat(result).isPresent();
+    assertThat(result.get().getDamageColor()).isEqualTo(expectedColor);
   }
 
   static Stream<Arguments> correctlyCalculatesDamageColor() {

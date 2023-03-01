@@ -106,11 +106,11 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
       return;
     }
 
-    var result = checker.checkItemStack(stack);
-    if (result == null) {
-      return;
-    }
+    checker.checkItemStack(stack).ifPresent(
+        result -> alertPlayer(player, stack, result));
+  }
 
+  private void alertPlayer(PlayerEntity player, ItemStack stack, DurabilityChecker.Result result) {
     var translationKey = "messages.durability-alert-mod.alert";
     var stackName = stack.getName();
 

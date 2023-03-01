@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import net.minecraft.item.ItemStack;
@@ -47,20 +48,20 @@ public class DurabilityChecker {
    * @param stack the item stack to check
    * @return a {@code Result} if an alert should be shown or {@code null} otherwise
    */
-  public Result checkItemStack(ItemStack stack) {
+  public Optional<Result> checkItemStack(ItemStack stack) {
     if (!isAlertable(stack)) {
-      return null;
+      return Optional.empty();
     }
 
     var result = new Result(stack);
 
     if (result.alertCutoff == null || result.repeats(previous)) {
-      return null;
+      return Optional.empty();
     }
 
     previous = result;
 
-    return result;
+    return Optional.of(result);
   }
 
   private Stream<Integer> alertCutoffs() {
