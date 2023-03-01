@@ -218,7 +218,7 @@ class DurabilityCheckerTests {
     assertThat(checker.checkItemStack(stack)).isEmpty();
   }
 
-  class Beef implements ToolMaterial {
+  static class Beef implements ToolMaterial {
     public float getAttackDamage() {
       return 0.0f;
     }
@@ -299,7 +299,7 @@ class DurabilityCheckerTests {
         ).flatMap(s -> s);
   }
 
-  static Stream<Arguments>randomColorExpectations(Random rnd, int lower, int upper,
+  static Stream<Arguments> randomColorExpectations(Random rnd, int lower, int upper,
       Formatting expectedColor) {
     return rnd.ints(4, lower, upper).boxed()
         .map(n -> arguments(new ColorExpectation(n, expectedColor)));
