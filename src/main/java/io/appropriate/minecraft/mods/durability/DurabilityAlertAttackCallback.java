@@ -122,8 +122,9 @@ public class DurabilityAlertAttackCallback implements AttackBlockCallback, Attac
     }
 
     var message = Text.translatable(
-        translationKey, stackName, result.getRemainingDamagePercent());
+            translationKey, stackName, result.getRemainingDamagePercent()
+        ).styled(style -> style.withColor(result.getDamageMessageColor()));
 
-    player.sendMessage(message.formatted(result.getDamageColor()), true);
+    player.sendMessage(message, true);
   }
 }

@@ -18,9 +18,11 @@ import static net.minecraft.text.Text.literal;
 import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import net.minecraft.Bootstrap;
@@ -260,48 +262,32 @@ class DurabilityCheckerTests {
     assertThat(result.get().getRemainingDamagePercent()).isEqualTo(percent);
   }
 
-  static IntStream correctlyCalculatesRemainingDamage() {
+  static IntFunction<Arguments> PERCENT_ARGUMENTS =
+      n -> arguments(named(String.format("%d%%", n), n));
+
+  static Stream<Arguments> correctlyCalculatesRemainingDamage() {
     // Return 0-100 by 10s
-    return IntStream.rangeClosed(0, 10).map(n -> n * 10);
+    return IntStream.rangeClosed(0, 10).map(n -> n * 10).mapToObj(PERCENT_ARGUMENTS);
   }
 
   @DisplayName("Correctly calculates damage color")
   @ParameterizedTest
   @MethodSource
-  void correctlyCalculatesDamageColor(ColorExpectation exp) {
+  void correctlyCalculatesDamageColor(int percent) {
     var config = new DurabilityAlertConfig();
     config.alertCutoffs = List.of(100);
     var checker = new DurabilityChecker(config);
 
     var stack = new ItemStack(DIAMOND_PICKAXE);
-    stack.setDamage((100 - exp.percent) * stack.getMaxDamage() / 100);
+    stack.setDamage((100 - percent) * stack.getMaxDamage() / 100);
 
     var result = checker.checkItemStack(stack);
     assertThat(result).isPresent();
-    assertThat(result.get().getDamageColor()).isEqualTo(exp.expectedColor);
+    assertThat(result.get().getDamageMessageColor().getRgb()).isEqualTo(stack.getItemBarColor());
   }
 
-  record ColorExpectation(int percent, Formatting expectedColor) {
-    @Override
-    public String toString() {
-      return String.format("%d%% → %s", percent, expectedColor.getName());
-    }
-  }
-
+  @SuppressFBWarnings("DMI_RANDOM_USED_ONLY_ONCE")
   static Stream<Arguments> correctlyCalculatesDamageColor() {
-    var rnd = new Random();
-
-    return Stream.of(
-            randomColorExpectations(rnd, 0, 15, Formatting.RED),
-            randomColorExpectations(rnd, 16, 40, Formatting.GOLD),
-            randomColorExpectations(rnd, 41, 75, Formatting.YELLOW),
-            randomColorExpectations(rnd, 76, 100, Formatting.GREEN)
-        ).flatMap(s -> s);
-  }
-
-  static Stream<Arguments> randomColorExpectations(Random rnd, int lower, int upper,
-      Formatting expectedColor) {
-    return rnd.ints(4, lower, upper).boxed()
-        .map(n -> arguments(new ColorExpectation(n, expectedColor)));
+    return new Random().ints(20, 0, 100).mapToObj(PERCENT_ARGUMENTS);
   }
 }

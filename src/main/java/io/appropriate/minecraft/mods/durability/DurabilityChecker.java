@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.TextColor;
 
 /**
  * A {@code DurabilityChecker} checks an {@link ItemStack} for durability changes according to a
@@ -101,11 +101,13 @@ public class DurabilityChecker {
   public class Result {
     private final ItemStack stack;
     private final int remainingDamagePercent;
+    private final TextColor damageMessageColor;
     private final Optional<Integer> alertCutoff;
 
     private Result(ItemStack stack) {
       this.stack = stack;
       this.remainingDamagePercent = calculateRemainingDamagePercent();
+      this.damageMessageColor = TextColor.fromRgb(stack.getItemBarColor());
       this.alertCutoff = findAlertCutoff();
     }
 
@@ -131,21 +133,12 @@ public class DurabilityChecker {
     }
 
     /**
-     * The formatting color to be used if a message is shown to the user based on this
-     * {@code Result}.
+     * The text color to be used if a message is shown to the user based on this {@code Result}.
      *
      * @return the color to be used for any displayed message
      */
-    public Formatting getDamageColor() {
-      if (remainingDamagePercent > 75) {
-        return Formatting.GREEN;
-      } else if (remainingDamagePercent > 40) {
-        return Formatting.YELLOW;
-      } else if (remainingDamagePercent > 15) {
-        return Formatting.GOLD;
-      } else {
-        return Formatting.RED;
-      }
+    public TextColor getDamageMessageColor() {
+      return damageMessageColor;
     }
 
     /**
