@@ -50,6 +50,10 @@ dependencies {
 
     // Work around bad interaction between MC's use of Guava and Truth's
     testRuntimeOnly "com.google.guava:guava:30.1-jre"
+
+    // Include SpotBugs annotations for compilation of main and test
+    compileOnly "com.github.spotbugs:spotbugs-annotations:${project.spotbugs_version}"
+    testCompileOnly "com.github.spotbugs:spotbugs-annotations:${project.spotbugs_version}"
 }
 
 processResources {
@@ -89,6 +93,10 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+spotbugs {
+  toolVersion = project.spotbugs_version
 }
 
 jacocoTestReport {
