@@ -12,17 +12,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import me.shedaniel.clothconfig2.gui.entries.AbstractListListEntry;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.util.NarratorManager;
+import net.minecraft.client.util.ChatNarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 /**
  * A config entry list consisting of bounded values that use one {@link AbstractSliderListCell} per
@@ -36,7 +35,7 @@ import net.minecraft.util.Identifier;
  * @param <SelfT> the "curiously recurring template pattern" type parameter
  * @see AbstractListListEntry
  */
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public abstract class AbstractSliderListEntry<
     T, C extends AbstractSliderListEntry.AbstractSliderListCell<T, C, SelfT>,
     SelfT extends AbstractSliderListEntry<T, C, SelfT>> extends AbstractListListEntry<T, C, SelfT> {
@@ -232,7 +231,7 @@ public abstract class AbstractSliderListEntry<
 
     private class Slider extends SliderWidget {
       protected Slider(int x, int y, int width, int height, double value) {
-        super(x, y, width, height, NarratorManager.EMPTY, value);
+        super(x, y, width, height, ChatNarratorManager.NO_TITLE, value);
       }
 
       protected void syncValueFromCell() {

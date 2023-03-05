@@ -7,15 +7,14 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 /**
  * A config entry list consisting of bounded {@link Integer} values that use one
  * {@link IntegerSliderListCell} per entry.
  */
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class IntegerSliderListEntry extends AbstractSliderListEntry<
     Integer, IntegerSliderListEntry.IntegerSliderListCell, IntegerSliderListEntry> {
   private static final Function<Integer, Text> DEFAULT_TEXT_GETTER =
