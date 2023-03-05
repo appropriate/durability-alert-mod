@@ -4,7 +4,10 @@ build/
 out/
 classes/
 
-# JUnit tests
+# Testing
+.quilt/
+config/quilt-loader.txt
+config/quilt/
 logs/
 
 # Quilt Loom
