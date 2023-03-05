@@ -12,16 +12,16 @@ import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.util.ActionResult;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
 /**
  * A Minecraft client-side mod that alerts a user each time the durability of a held item falls
  * below certain durability thresholds.
  */
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class DurabilityAlertMod implements ClientModInitializer {
   private static final ConfigEntryBuilder ENTRY_BUILDER = ConfigEntryBuilder.create();
 
@@ -37,9 +37,11 @@ public class DurabilityAlertMod implements ClientModInitializer {
    * <p>Registers handlers related to the mod's configuration screen and settings and installs a
    * {@link DurabilityAlertAttackCallback} to be notified each time a held item is used to attack a
    * block or entity.
+   *
+   * @param mod the mod which is initialized
    */
   @Override
-  public void onInitializeClient() {
+  public void onInitializeClient(ModContainer mod) {
     AutoConfig.register(DurabilityAlertConfig.class, GsonConfigSerializer::new);
 
     var registry = AutoConfig.getGuiRegistry(DurabilityAlertConfig.class);

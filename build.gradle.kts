@@ -1,42 +1,18 @@
-import com.vdurmont.semver4j.Semver
-
-fun majorMinor(version: String): String {
-  val semver = Semver(version)
-  return "${semver.major}.${semver.minor}"
-}
-
 plugins {
-  id("fabric-loom") version "1.1-SNAPSHOT"
   `maven-publish`
+  alias(libs.plugins.quilt.loom)
   jacoco
   checkstyle
-  id("com.github.spotbugs") version "5.0.13"
+  alias(libs.plugins.spotbugs)
 }
 
 // To change the versions see the gradle.properties file
 val archives_base_name: String by project
-val mod_version: String by project
 val maven_group: String by project
-val minecraft_version: String by project
-val yarn_mappings: String by project
-val loader_version: String by project
-val fabric_version: String by project
-val cloth_config_version: String by project
-val modmenu_version: String by project
-val truth_version: String by project
-val spotbugs_version: String by project
+//val loader_version: String by project
 
-version = mod_version
+version = "${project.version}+${libs.versions.minecraft.get()}"
 group = maven_group
-
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath("com.vdurmont:semver4j:3.1.0")
-  }
-}
 
 base {
   archivesName.set(archives_base_name)
@@ -48,55 +24,56 @@ repositories {
 }
 
 dependencies {
-  minecraft("com.mojang:minecraft:$minecraft_version")
-  mappings("net.fabricmc:yarn:$yarn_mappings:v2")
-  modImplementation("net.fabricmc:fabric-loader:$loader_version")
+  minecraft(libs.minecraft)
+  mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
+	modImplementation(libs.quilt.loader)
 
-  // Fabric API. This is technically optional, but you probably want it anyway.
-  modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
+	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
+	// Quilted Fabric API will automatically pull in the correct QSL version.
+	modImplementation(libs.quilted.fabric.api)
 
   // Cloth Config
-  modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+  modApi(libs.cloth.config.fabric) {
     exclude("net.fabricmc", "fabric-loader")
     exclude("net.fabricmc.fabric-api")
   }
 
   // Modmenu
-  modImplementation("com.terraformersmc:modmenu:${modmenu_version}") {
+  modImplementation(libs.modmenu) {
     exclude("net.fabricmc", "fabric-loader")
   }
 
   // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
   // You may need to force-disable transitiveness on them.
 
-  testImplementation("net.fabricmc:fabric-loader-junit:$loader_version")
+  //testImplementation("net.fabricmc:fabric-loader-junit:$loader_version")
   testImplementation(platform("org.junit:junit-bom:5.9.2"))
   testImplementation("org.junit.jupiter:junit-jupiter")
 
   // Google Truth
-  testImplementation("com.google.truth:truth:$truth_version")
-  testImplementation("com.google.truth.extensions:truth-java8-extension:$truth_version")
+  testImplementation(libs.bundles.truth)
 
   // Work around bad interaction between MC's use of Guava and Truth's
   testRuntimeOnly("com.google.guava:guava:30.1-jre")
 
   // Include SpotBugs annotations for compilation of main and test
-  compileOnly("com.github.spotbugs:spotbugs-annotations:$spotbugs_version")
-  testCompileOnly("com.github.spotbugs:spotbugs-annotations:$spotbugs_version")
+  compileOnly(libs.spotbugs.annotations)
+  testCompileOnly(libs.spotbugs.annotations)
 }
 
 tasks.processResources {
   val properties = mapOf(
     "version" to project.version,
     "java_version" to java.targetCompatibility.majorVersion,
-    "loader_version" to loader_version,
-    "minecraft_version" to minecraft_version,
-    "cloth_config_version" to majorMinor(cloth_config_version),
-    "modmenu_version" to majorMinor(modmenu_version))
+    "loader_version" to libs.versions.quilt.loader.get(),
+    "api_version" to libs.versions.quilted.fabric.api.get(),
+    "minecraft_version" to libs.versions.minecraft.get(),
+    "cloth_config_version" to libs.versions.cloth.config.get(),
+    "modmenu_version" to libs.versions.modmenu.get())
 
   inputs.properties(properties)
 
-  filesMatching("fabric.mod.json") {
+  filesMatching("quilt.mod.json") {
     expand(properties)
   }
 }
@@ -139,7 +116,7 @@ tasks.test {
 }
 
 spotbugs {
-  toolVersion.set(spotbugs_version)
+  toolVersion.set(libs.versions.spotbugs)
 }
 
 tasks.jacocoTestReport {
