@@ -1,3 +1,10 @@
+import com.vdurmont.semver4j.Semver
+
+fun majorMinor(version: String): String {
+  val semver = Semver(version)
+  return "${semver.major}.${semver.minor}"
+}
+
 plugins {
   id("fabric-loom") version "1.1-SNAPSHOT"
   `maven-publish`
@@ -14,11 +21,22 @@ val minecraft_version: String by project
 val yarn_mappings: String by project
 val loader_version: String by project
 val fabric_version: String by project
+val cloth_config_version: String by project
+val modmenu_version: String by project
 val truth_version: String by project
 val spotbugs_version: String by project
 
 version = mod_version
 group = maven_group
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("com.vdurmont:semver4j:3.1.0")
+  }
+}
 
 base {
   archivesName.set(archives_base_name)
@@ -38,13 +56,13 @@ dependencies {
   modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
 
   // Cloth Config
-  modApi("me.shedaniel.cloth:cloth-config-fabric:9.0.94") {
+  modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
     exclude("net.fabricmc", "fabric-loader")
     exclude("net.fabricmc.fabric-api")
   }
 
   // Modmenu
-  modImplementation("com.terraformersmc:modmenu:5.1.0-beta.4") {
+  modImplementation("com.terraformersmc:modmenu:${modmenu_version}") {
     exclude("net.fabricmc", "fabric-loader")
   }
 
@@ -68,10 +86,18 @@ dependencies {
 }
 
 tasks.processResources {
-  inputs.property("version", project.version)
+  val properties = mapOf(
+    "version" to project.version,
+    "java_version" to java.targetCompatibility.majorVersion,
+    "loader_version" to loader_version,
+    "minecraft_version" to minecraft_version,
+    "cloth_config_version" to majorMinor(cloth_config_version),
+    "modmenu_version" to majorMinor(modmenu_version))
+
+  inputs.properties(properties)
 
   filesMatching("fabric.mod.json") {
-    expand(mapOf("version" to project.version))
+    expand(properties)
   }
 }
 
