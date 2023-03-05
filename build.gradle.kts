@@ -1,6 +1,6 @@
 plugins {
-	id("fabric-loom") version "1.1-SNAPSHOT"
-	`maven-publish`
+  id("fabric-loom") version "1.1-SNAPSHOT"
+  `maven-publish`
   jacoco
   checkstyle
   id("com.github.spotbugs") version "5.0.13"
@@ -70,14 +70,14 @@ dependencies {
 tasks.processResources {
   inputs.property("version", project.version)
 
-	filesMatching("fabric.mod.json") {
-		expand(mapOf("version" to project.version))
-	}
+  filesMatching("fabric.mod.json") {
+    expand(mapOf("version" to project.version))
+  }
 }
 
 tasks.withType<JavaCompile> {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	options.release.set(17)
+  // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+  options.release.set(17)
 }
 
 checkstyle {
@@ -122,19 +122,19 @@ tasks.jacocoTestReport {
 
 // configure the maven publication
 publishing {
-	publications {
+  publications {
     create<MavenPublication>("mavenJava") {
       from(components["java"])
     }
-	}
+  }
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+  // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+  repositories {
+    // Add repositories to publish to here.
+    // Notice: This block does NOT have the same function as the block in the top level.
+    // The repositories here will be used for publishing your artifact, not for
+    // retrieving dependencies.
+  }
 }
 
 tasks.register<Copy>("copyToLocalMinecraft") {
