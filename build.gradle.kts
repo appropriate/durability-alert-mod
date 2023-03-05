@@ -9,7 +9,6 @@ plugins {
 // To change the versions see the gradle.properties file
 val archives_base_name: String by project
 val maven_group: String by project
-//val loader_version: String by project
 
 version = "${project.version}+${libs.versions.minecraft.get()}"
 group = maven_group
@@ -46,7 +45,7 @@ dependencies {
   // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
   // You may need to force-disable transitiveness on them.
 
-  //testImplementation("net.fabricmc:fabric-loader-junit:$loader_version")
+  testImplementation(libs.quilt.loader.junit)
   testImplementation(platform("org.junit:junit-bom:5.9.2"))
   testImplementation("org.junit.jupiter:junit-jupiter")
 
