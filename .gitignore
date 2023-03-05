@@ -4,12 +4,6 @@ build/
 out/
 classes/
 
-# Testing
-.quilt/
-config/quilt-loader.txt
-config/quilt/
-logs/
-
 # Quilt Loom
 remappedSrc/
 run/
