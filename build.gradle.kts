@@ -80,6 +80,9 @@ tasks.processResources {
 tasks.withType<JavaCompile> {
   // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
   options.release.set(17)
+
+  options.compilerArgs.add("-Xlint:deprecation")
+  options.compilerArgs.add("-Xlint:unchecked")
 }
 
 checkstyle {
