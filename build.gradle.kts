@@ -149,4 +149,6 @@ tasks.register<Copy>("copyToLocalMinecraft") {
   from(tasks.remapJar)
 
   into("${System.getProperty("user.home")}/Library/Application Support/minecraft/mods")
+
+  eachFile { println("Copying ${name} to ${relativePath.getFile(destinationDir)}") }
 }
