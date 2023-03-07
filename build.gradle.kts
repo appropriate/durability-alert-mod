@@ -112,6 +112,7 @@ tasks.jar {
 tasks.test {
   useJUnitPlatform()
   workingDir(project.file("run"))
+  doFirst { mkdir(workingDir) }
   finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
   testLogging {
     events("passed", "skipped", "failed")
