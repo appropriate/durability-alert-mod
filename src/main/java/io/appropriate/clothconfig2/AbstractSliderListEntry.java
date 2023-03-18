@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import me.shedaniel.clothconfig2.gui.entries.AbstractListListEntry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -266,37 +265,6 @@ public abstract class AbstractSliderListEntry<
           return false;
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-      }
-
-      @Override
-      protected void renderBackground(MatrixStack matrices, MinecraftClient client,
-          int mouseX, int mouseY) {
-        /*
-         * If the width is greater than 200, then fill in the gap in the middle with more button bg
-         */
-        int gap = width - 200;
-        if (gap > 0) {
-          client.getTextureManager().bindTexture(new Identifier("textures/gui/widgets.png"));
-
-          int offset = 100;
-          do {
-            drawTexture(matrices, getX() + offset, getY(), 1, 46 + 0 * 20,
-                Math.min(gap, 198), height);
-
-            offset += 198;
-            gap -= 198;
-          } while (gap > 0);
-        }
-
-        // Note: the non-error highlight color here is a bit darker
-        // than the normal highlight of 0xffe0e0e0 to let the scrubber stand out
-        if (isSelected && listListEntry.isEditable()) {
-          fill(matrices, getX(), getY() + 19, getX() + width, getY() + 20,
-              getConfigError().isPresent() ? 0xffff5555 : 0xffa0a0a0);
-        }
-
-        // Render the scrubber on top of anything we've drawn
-        super.renderBackground(matrices, client, mouseX, mouseY);
       }
     }
   }
