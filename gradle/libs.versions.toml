@@ -1,13 +1,13 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
-minecraft = "1.19.3"
-quilt_mappings = "1.19.3+build.26"
-quilt_loader = "0.18.4-pre.3"
+minecraft = "1.19.4"
+quilt_mappings = "1.19.4+build.5"
+quilt_loader = "0.18.5"
 
-quilted_fabric_api = "5.0.0-beta.8+0.75.1-1.19.3"
+quilted_fabric_api = "6.0.0-beta.2+0.76.0-1.19.4"
 
-cloth_config = "9.0.94"
-modmenu = "5.1.0-beta.4"
+cloth_config = "10.0.95"
+modmenu = "6.1.0-rc.4"
 spotbugs = "4.7.3"
 truth = "1.1.3"
 
