@@ -22,14 +22,30 @@ repositories {
   maven { url = uri("https://maven.terraformersmc.com/releases/") }
 }
 
+/*
+loom {
+  mods.invoke {
+    // XXX: Failing with "ModSettings with name 'durability-alert-mod' not found."
+    "durability-alert-mod" {
+      // Tell Loom about each source set used by your mod here. This ensures that your mod's classes are properly transformed by Loader.
+      sourceSet("main")
+
+      // If you shade (directly include classes, not JiJ) a dependency into your mod, include it here using one of these methods:
+      // dependency("com.example.shadowedmod:1.2.3")
+      // configuration("exampleShadedConfigurationName")
+    }
+  }
+}
+*/
+
 dependencies {
   minecraft(libs.minecraft)
   mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
-	modImplementation(libs.quilt.loader)
+  modImplementation(libs.quilt.loader)
 
-	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
-	// Quilted Fabric API will automatically pull in the correct QSL version.
-	modImplementation(libs.quilted.fabric.api)
+  // QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
+  // Quilted Fabric API will automatically pull in the correct QSL version.
+  modImplementation(libs.quilted.fabric.api)
 
   // Cloth Config
   modApi(libs.cloth.config.fabric) {
