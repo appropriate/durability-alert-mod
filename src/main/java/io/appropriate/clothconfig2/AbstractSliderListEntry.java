@@ -13,11 +13,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import me.shedaniel.clothconfig2.gui.entries.AbstractListListEntry;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.ChatNarratorManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
@@ -212,7 +212,7 @@ public abstract class AbstractSliderListEntry<
     }
 
     @Override
-    public void render(MatrixStack matrices, int index, int y, int x,
+    public void render(GuiGraphics graphics, int index, int y, int x,
         int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isFocusedCell,
         float delta) {
       sliderWidget.setX(x);
@@ -220,7 +220,7 @@ public abstract class AbstractSliderListEntry<
       sliderWidget.setWidth(entryWidth - 12);
       sliderWidget.active = listListEntry.isEditable();
       isHovered = sliderWidget.isMouseOver(mouseX, mouseY);
-      sliderWidget.render(matrices, mouseX, mouseY, delta);
+      sliderWidget.render(graphics, mouseX, mouseY, delta);
     }
 
     @Override
