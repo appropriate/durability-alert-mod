@@ -6,8 +6,8 @@ quilt_loader = "0.21.0"
 
 quilted_fabric_api = "7.3.1+0.89.3-1.20.1"
 
-cloth_config = "10.0.95"
-modmenu = "6.1.0-rc.4"
+cloth_config = "11.1.106"
+modmenu = "7.2.2"
 spotbugs = "4.7.3"
 truth = "1.1.3"
 
