@@ -161,6 +161,10 @@ publishing {
 }
 
 tasks.register<Copy>("copyToLocalMinecraft") {
+  group = "Publishing"
+
+  description = "Copies the JAR file to the local Minecraft installation."
+
   dependsOn(tasks.build)
 
   from(tasks.remapJar)
